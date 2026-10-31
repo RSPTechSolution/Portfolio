@@ -1,12 +1,12 @@
 ---
-import '@fontsource-variable/bricolage-grotesque/standard.css';
+import '@fontsource-variable/bricolage-grotesque/wdth.css';
 import '@fontsource/newsreader/400-italic.css';
-import '@fontsource/newsreader/500-italic.css';
 import '@fontsource/martian-mono/300.css';
 import '@fontsource/martian-mono/400.css';
 import '@fontsource/martian-mono/600.css';
 import '../styles/tokens.css';
 import '../styles/global.css';
+import displayFont from '@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wdth-normal.woff2?url';
 
 interface Props { title: string; description: string }
 const { title, description } = Astro.props;
@@ -21,6 +21,7 @@ const { title, description } = Astro.props;
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href={displayFont} as="font" type="font/woff2" crossorigin />
     <script is:inline>
       (function () {
         var d = document.documentElement, keys = ['all', 'drupal', 'php', 'backend', 'ai'];

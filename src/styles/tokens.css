@@ -23,7 +23,8 @@
   --text: #151411;
   --muted: #6f665b;
   --accent: var(--red);
-  --on-accent: #ffffff;
+  --accent-text: #c4320c; /* vermilion darkened to pass WCAG AA as text */
+  --on-accent: #151411;
   --line: #151411;
   --out: 14px 18px 34px rgba(110, 85, 60, .24), -10px -10px 24px rgba(255, 255, 255, .85),
          inset -6px -8px 14px rgba(120, 95, 70, .12), inset 6px 6px 12px rgba(255, 255, 255, .75);
@@ -37,6 +38,7 @@
   --text: #ede4d4;
   --muted: #9a9082;
   --accent: var(--amber);
+  --accent-text: var(--amber);
   --on-accent: #1b1916;
   --line: #3a352d;
   --out: 10px 10px 24px #100f0c, -8px -8px 20px #2f2b25;

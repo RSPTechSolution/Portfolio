@@ -17,12 +17,12 @@ const steps = ['Prompt', 'Generate', 'Review', 'Test', 'Ship'];
 </section>
 
 <style>
-  .lead { font: 500 clamp(20px, 2vw, 26px)/1.35 var(--serif); font-style: italic; margin-top: 18px; max-width: 34ch; }
+  .lead { font: 400 clamp(20px, 2vw, 26px)/1.35 var(--serif); font-style: italic; margin-top: 18px; max-width: 34ch; }
   .keys { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-top: 48px; }
   .flow { list-style: none; display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; margin-top: 40px; border-radius: 24px; overflow: hidden; box-shadow: var(--out); }
   .flow li { position: relative; padding: 22px 20px; font: 800 22px var(--disp); font-stretch: 80%; background: var(--surface); }
   .flow li + li { border-left: 1px solid var(--line); }
-  .flow li:not(:last-child)::after { content: "→"; position: absolute; right: -9px; top: 50%; translate: 0 -50%; z-index: 1; color: var(--accent); font-weight: 400; }
-  .n { display: block; color: var(--accent); margin-bottom: 6px; }
+  .flow li:not(:last-child)::after { content: "→"; position: absolute; right: -9px; top: 50%; translate: 0 -50%; z-index: 1; color: var(--accent-text); font-weight: 400; }
+  .n { display: block; color: var(--accent-text); margin-bottom: 6px; }
   @media (max-width: 860px) { .keys { grid-template-columns: 1fr; } .flow { grid-template-columns: 1fr; } .flow li + li { border-left: 0; border-top: 1px solid var(--line); } .flow li::after { display: none; } }
 </style>

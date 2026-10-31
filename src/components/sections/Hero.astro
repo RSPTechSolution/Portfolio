@@ -29,7 +29,7 @@ const all = roles[0];
     </div>
     <figure class="frame" data-portrait>
       <div class="in">
-        <Picture src={portrait} formats={['avif', 'webp']} widths={[480, 720, 1000]} sizes="(max-width: 960px) 80vw, 460px"
+        <Picture src={portrait} formats={['avif', 'webp']} widths={[360, 540, 720, 1000]} sizes="(max-width: 960px) min(80vw, 352px), 460px"
           alt={`Portrait of ${profile.name}`} fetchpriority="high" loading="eager" />
         <div class="hud" aria-hidden="true"><span>● NIGHT CAM</span><span>CH-02</span></div>
       </div>
@@ -47,9 +47,9 @@ const all = roles[0];
   h1 { font: 800 clamp(84px, 13vw, 220px)/.8 var(--disp); font-stretch: 75%; letter-spacing: -.045em; text-transform: uppercase; margin-top: 24px; }
   .l { display: block; overflow: hidden; padding-bottom: .04em; }
   .l > span { display: inline-block; }
-  .acc { color: var(--accent); transition: color .4s; }
+  .acc { color: var(--accent-text); transition: color .4s; }
   .lede { margin-top: 28px; max-width: 38ch; font-size: clamp(19px, 1.6vw, 22px); line-height: 1.4; }
-  .role { display: block; font: 500 24px/1.2 var(--serif); font-style: italic; color: var(--accent); margin-bottom: 8px; min-height: 1.2em; }
+  .role { display: block; font: 400 24px/1.2 var(--serif); font-style: italic; color: var(--accent-text); margin-bottom: 8px; min-height: 1.2em; }
   .ctl { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; margin-top: 26px; }
   .resumes { display: contents; }
   .ctl :global(.btn) { display: inline-flex; align-items: center; gap: 10px; font: 700 15px var(--disp); text-decoration: none; padding: 14px 20px; border-radius: 999px; background: var(--surface); box-shadow: var(--out); transition: transform .2s var(--ease); }
@@ -61,6 +61,11 @@ const all = roles[0];
   :global([data-theme="night"]) .in { background: radial-gradient(ellipse, #2a1a05, #0c0a07 70%); }
   .in :global(img) { width: 100%; height: 100%; object-fit: cover; }
   .frame :global(canvas) { position: absolute; inset: 14px; width: calc(100% - 28px); height: calc(100% - 28px); border-radius: 28px; }
+  /* Night treatment without WebGL (touch devices, no-WebGL fallback): amber CRT look in CSS. */
+  :global([data-theme="night"]) .in :global(img) { filter: grayscale(1) sepia(1) saturate(4) hue-rotate(-12deg) brightness(.82) contrast(1.15); }
+  :global([data-theme="night"]) .in::after { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+    background: repeating-linear-gradient(0deg, rgba(0,0,0,.28) 0 2px, transparent 2px 4px); box-shadow: inset 0 0 60px rgba(0,0,0,.7); }
+  :global(html.has-3d[data-theme="night"]) .in::after { display: none; }
   .hud { position: absolute; inset: 16px 18px auto; z-index: 3; display: flex; justify-content: space-between; opacity: 0; transition: opacity .4s;
     font: 400 9.5px var(--mono); letter-spacing: .16em; color: var(--amber); text-shadow: 0 0 8px rgba(255,181,71,.7); }
   :global([data-theme="night"]) .hud { opacity: 1; }
@@ -69,6 +74,7 @@ const all = roles[0];
   @media (max-width: 960px) {
     .hero-in { grid-template-columns: 1fr; }
     .frame { max-width: 380px; width: 100%; margin-inline: auto; }
+    .tag { right: 10px; }
   }
 </style>
 
@@ -85,6 +91,12 @@ const all = roles[0];
     const p = await mountPortrait(frame, { subject: '/img/portrait-subject.webp', bg: '/img/portrait-bg.webp' }, currentTheme());
     if (p) document.addEventListener('themechange', (e) => p.setTheme((e as CustomEvent<{ theme: Theme }>).detail.theme));
   };
-  if ('requestIdleCallback' in window) requestIdleCallback(() => void start(), { timeout: 1200 });
-  else setTimeout(() => void start(), 200);
+  // WebGL only where it adds something (pointer tilt) and the device can afford it.
+  // Touch/small screens keep the static photo; night mode there is a CSS treatment.
+  const desktop = matchMedia('(hover: hover) and (pointer: fine) and (min-width: 769px)').matches;
+  if (desktop) {
+    document.documentElement.classList.add('has-3d');
+    const go = () => ('requestIdleCallback' in window ? requestIdleCallback(() => void start(), { timeout: 1500 }) : setTimeout(() => void start(), 200));
+    if (document.readyState === 'complete') go(); else addEventListener('load', go, { once: true });
+  }
 </script>

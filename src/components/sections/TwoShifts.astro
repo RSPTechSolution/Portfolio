@@ -18,7 +18,7 @@ const shifts = [
           <h3>{s.title}</h3>
           <ul>{s.items.map((i) => <li>{i}</li>)}</ul>
           {s.key === 'night' && <Meter />}
-          <span class="big" aria-hidden="true">{s.big}</span>
+          <span class="big" aria-hidden="true" data-glyph={s.big}></span>
         </button>
       ))}
     </div>
@@ -36,6 +36,7 @@ const shifts = [
   h3 { font: 800 clamp(34px, 3.6vw, 52px)/.95 var(--disp); font-stretch: 75%; letter-spacing: -.03em; }
   ul { list-style: none; display: grid; gap: 8px; font-size: 16px; }
   li::before { content: "→ "; opacity: .6; }
+  .big::after { content: attr(data-glyph); }
   .big { position: absolute; right: -10px; bottom: -40px; font: 800 220px/1 var(--disp); font-stretch: 75%; opacity: .12; pointer-events: none; }
   .night :global(.vu) { margin-top: auto; }
   @media (max-width: 960px) { .shifts { grid-template-columns: 1fr; } .card { min-height: 0; } }
