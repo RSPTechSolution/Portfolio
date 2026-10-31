@@ -1,6 +1,17 @@
 ---
 import Base from '../layouts/Base.astro';
+import RoleControl from '../components/ui/RoleControl.astro';
+import { skills } from '../content/data/skills';
+import { roles } from '../content/data/roles';
+const all = roles[0];
 ---
 <Base title="Subodh Kant — Backend & Drupal Engineer" description="Portfolio of Subodh Kant, Backend & Drupal Engineer in Ludhiana, India.">
-  <main><h1>Subodh Kant</h1></main>
+  <main>
+    <h1>Subodh Kant</h1>
+    <!-- Temporary role hooks (Task 3); replaced by real sections in Task 7. -->
+    <p data-role-title>{all.title}</p>
+    <RoleControl />
+    <div data-role-resume>{all.resumes.map((r) => <a class="btn" href={r.href} download>↓ {r.label}</a>)}</div>
+    <ul data-role-list>{all.skillOrder.map((k) => <li data-skill={k}>{skills.find((s) => s.key === k)!.name}</li>)}</ul>
+  </main>
 </Base>

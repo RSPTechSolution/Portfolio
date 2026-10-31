@@ -21,7 +21,13 @@ const { title, description } = Astro.props;
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <script is:inline>document.documentElement.classList.add('js');</script>
+    <script is:inline>
+      (function () {
+        var d = document.documentElement, keys = ['all', 'drupal', 'php', 'backend', 'ai'];
+        d.classList.add('js');
+        try { var r = (new URLSearchParams(location.search).get('role') || '').trim().toLowerCase(); if (keys.indexOf(r) > -1) d.dataset.role = r; } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <slot name="topbar" />

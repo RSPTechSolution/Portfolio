@@ -1,0 +1,36 @@
+---
+import { roles } from '../../content/data/roles';
+---
+<div class="seg" role="group" aria-label="View portfolio as">
+  <span class="pill" aria-hidden="true"></span>
+  {roles.map((r) => <button type="button" data-role-btn={r.key} aria-pressed={r.key === 'all' ? 'true' : 'false'}>{r.label}</button>)}
+</div>
+
+<style>
+  .seg { position: relative; display: inline-flex; flex-wrap: wrap; padding: 6px; border-radius: 28px; background: var(--surface); box-shadow: var(--in); }
+  .seg button { position: relative; z-index: 1; border: 0; background: none; font: 700 14px var(--disp); padding: 10px 15px; border-radius: 999px; cursor: pointer; transition: color .35s; }
+  .seg button[aria-pressed="true"] { color: var(--on-accent); }
+  .pill { position: absolute; top: 0; left: 0; border-radius: 999px; background: var(--accent);
+    box-shadow: inset -3px -4px 8px rgba(0,0,0,.25), inset 3px 3px 6px rgba(255,255,255,.35);
+    transition: transform .55s var(--ease), width .55s var(--ease), height .55s var(--ease), background .4s; }
+  :global(html:not(.js)) .pill { display: none; }
+  :global(html:not(.js)) .seg button[aria-pressed="true"] { color: inherit; text-decoration: underline; }
+</style>
+
+<script>
+  import { initRoles } from '../../scripts/roles';
+
+  function movePill() {
+    document.querySelectorAll<HTMLElement>('.seg').forEach((seg) => {
+      const b = seg.querySelector<HTMLElement>('[aria-pressed="true"]');
+      const pill = seg.querySelector<HTMLElement>('.pill');
+      if (!b || !pill) return;
+      pill.style.width = `${b.offsetWidth}px`;
+      pill.style.height = `${b.offsetHeight}px`;
+      pill.style.transform = `translate(${b.offsetLeft}px, ${b.offsetTop}px)`;
+    });
+  }
+  document.addEventListener('rolechange', movePill);
+  addEventListener('resize', movePill);
+  initRoles();
+</script>
