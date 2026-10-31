@@ -2,17 +2,27 @@
 import Base from './Base.astro';
 import TopBar from '../components/TopBar.astro';
 import PipelineSchematic from '../components/PipelineSchematic.astro';
+import { graph, personSchema, caseStudySchema, breadcrumbSchema, HOME_SEO } from '../seo/schema';
 interface Props {
   title: string; summary: string; slug: string; stack: string[];
   prev?: { slug: string; title: string }; next?: { slug: string; title: string };
 }
 const { title, summary, slug, stack, prev, next } = Astro.props;
+const site = Astro.site!.href;
+const path = `/work/${slug}`;
+const seo = {
+  title: `${title}: Case Study · Subodh Kant`,
+  description: `${summary} Case study by Subodh Kant, Drupal & backend developer: ${stack.slice(0, 4).join(', ')}.`,
+  path, ogImage: `/og/${slug}.png`, ogType: 'article' as const,
+  keywords: [...stack, 'case study', ...HOME_SEO.keywords.slice(0, 8)],
+  jsonLd: graph(caseStudySchema(site, { title, slug, summary, stack }), breadcrumbSchema(site, [{ name: 'Home', path: '/' }, { name: 'Work', path: '/#work' }, { name: title, path }]), personSchema(site)),
+};
 ---
-<Base title={`${title} — Subodh Kant`} description={summary}>
+<Base seo={seo}>
   <TopBar slot="topbar" />
   <main id="top" class="cs">
     <div class="wrap">
-      <a class="back mono" href="/#work">← All work</a>
+      <nav class="crumbs mono" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/#work">Work</a> / <span aria-current="page">{title}</span></nav>
       <h1>{title}</h1>
       <p class="sum">{summary}</p>
       <ul class="stack">{stack.map((s) => <li class="mono">{s}</li>)}</ul>
@@ -28,7 +38,7 @@ const { title, summary, slug, stack, prev, next } = Astro.props;
 
 <style>
   .cs { padding: 130px 0 100px; }
-  .back { text-decoration: none; color: var(--accent-text); }
+  .crumbs a { color: var(--accent-text); text-decoration: underline; text-underline-offset: 3px; }
   h1 { font: 800 clamp(56px, 9vw, 140px)/.85 var(--disp); font-stretch: 75%; letter-spacing: -.04em; margin-top: 20px; }
   .sum { font: 400 clamp(20px, 2vw, 26px)/1.35 var(--serif); font-style: italic; margin-top: 20px; max-width: 40ch; }
   .stack { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }

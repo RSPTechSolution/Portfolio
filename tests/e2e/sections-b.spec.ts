@@ -8,7 +8,7 @@ test('case study pages render', async ({ page }) => {
 });
 
 test('pipeline is labelled', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/work/ads-delivery-system');
   await expect(page.getByRole('img', { name: /Assigned.*Clicked/ }).first()).toBeAttached();
 });
 

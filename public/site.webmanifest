@@ -1,0 +1,14 @@
+{
+  "name": "Subodh Kant · Drupal & Backend Developer",
+  "short_name": "Subodh Kant",
+  "description": "Portfolio of Subodh Kant, Drupal, PHP & Python backend developer in Ludhiana, India.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f0ebe3",
+  "theme_color": "#151411",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

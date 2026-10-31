@@ -103,6 +103,15 @@ const all = roles[0];
   };
   // 3D on every device, started after the page has loaded so it never competes with first paint.
   // Touch screens tilt with scroll + idle sway (portrait3d.ts); html.has-3d is set only once WebGL works.
-  const go = () => ('requestIdleCallback' in window ? requestIdleCallback(() => void start(), { timeout: 1500 }) : setTimeout(() => void start(), 200));
+  let started = false;
+  const run = () => { if (!started) { started = true; void start(); } };
+  const idle = () => ('requestIdleCallback' in window ? requestIdleCallback(run, { timeout: 1500 }) : setTimeout(run, 200));
+  // Touch devices have slower CPUs: wait for the first touch/scroll, or 4 s after load, so 3D never blocks first input.
+  const touch = matchMedia('(pointer: coarse)').matches;
+  const go = () => {
+    if (!touch) { idle(); return; }
+    ['touchstart', 'scroll', 'pointerdown'].forEach((ev) => addEventListener(ev, idle, { once: true, passive: true }));
+    setTimeout(idle, 4000);
+  };
   if (document.readyState === 'complete') go(); else addEventListener('load', go, { once: true });
 </script>

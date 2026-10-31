@@ -2,7 +2,7 @@
   "ci": {
     "collect": {
       "staticDistDir": "./dist",
-      "url": ["http://localhost/index.html", "http://localhost/work/ads-delivery-system/index.html"],
+      "url": ["http://localhost/index.html", "http://localhost/work/ads-delivery-system.html"],
       "numberOfRuns": 1,
       "settings": { "chromeFlags": "--headless=new" }
     },
