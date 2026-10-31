@@ -2,15 +2,25 @@
 import Base from '../layouts/Base.astro';
 import TopBar from '../components/TopBar.astro';
 import Hero from '../components/sections/Hero.astro';
-import { skills } from '../content/data/skills';
-import { roles } from '../content/data/roles';
-const all = roles[0];
+import Ticker from '../components/sections/Ticker.astro';
+import About from '../components/sections/About.astro';
+import TwoShifts from '../components/sections/TwoShifts.astro';
+import Stack from '../components/sections/Stack.astro';
 ---
-<Base title="Subodh Kant — Backend & Drupal Engineer" description="Portfolio of Subodh Kant, Backend & Drupal Engineer in Ludhiana, India.">
+<Base title="Subodh Kant — Backend & Drupal Engineer" description="Portfolio of Subodh Kant, Backend & Drupal Engineer in Ludhiana, India: enterprise Drupal platforms and real-time Python backends.">
   <TopBar slot="topbar" />
   <main id="top">
     <Hero />
-    <!-- Temporary skill list (Task 3); replaced by the Stack section in Task 7. -->
-    <ul data-role-list>{all.skillOrder.map((k) => <li data-skill={k}>{skills.find((s) => s.key === k)!.name}</li>)}</ul>
+    <Ticker />
+    <About />
+    <TwoShifts />
+    <Stack />
   </main>
 </Base>
+
+<script>
+  import { initReveal } from '../scripts/reveal';
+  import { initClock } from '../scripts/clock';
+  initReveal();
+  initClock();
+</script>

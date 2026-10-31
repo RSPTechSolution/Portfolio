@@ -1,0 +1,37 @@
+---
+import { skills } from '../../content/data/skills';
+import { roles } from '../../content/data/roles';
+const ordered = roles[0].skillOrder.map((k) => skills.find((s) => s.key === k)!);
+---
+<section id="stack" class="section tight">
+  <div class="wrap">
+    <p class="kicker mono" data-reveal>Stack · reorders for the selected role</p>
+    <h2 class="h2" data-reveal>The <em>parts</em> I build with.</h2>
+    <ul class="parts" data-role-list>
+      {ordered.map((s) => (
+        <li data-skill={s.key} class="part" data-roles={s.roles.join(' ')}>
+          <span class="group mono">{s.group}</span>
+          <h3>{s.name}</h3>
+          <p>{s.spec}</p>
+          <span class="meter" role="meter" aria-label={`${s.name} proficiency`} aria-valuemin="0" aria-valuemax="100" aria-valuenow={s.level}>
+            <i style={`--v:${s.level}%`}></i>
+          </span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .parts { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 56px; }
+  .part { padding: 22px 24px; border-radius: 24px; background: var(--surface); box-shadow: var(--out); display: grid; gap: 8px; align-content: start; }
+  .part h3 { font: 800 24px/1.05 var(--disp); font-stretch: 80%; }
+  .part p { font-size: 14.5px; color: var(--muted); }
+  .group { color: var(--accent); }
+  .meter { display: block; height: 8px; border-radius: 99px; box-shadow: var(--in); overflow: hidden; margin-top: 6px; }
+  .meter i { display: block; height: 100%; width: var(--v); border-radius: 99px; background: var(--accent); }
+  :global([data-role]:not([data-role="all"])) .part:not(.is-dim) { outline: 2px solid var(--accent); outline-offset: -2px; }
+  .part.is-dim { opacity: .55; filter: saturate(.4); }
+  @media (max-width: 960px) { .parts { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .parts { grid-template-columns: 1fr; } }
+</style>

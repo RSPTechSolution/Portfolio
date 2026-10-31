@@ -1,0 +1,11 @@
+---
+interface Props { color?: 'mint' | 'amber' | 'red' }
+const { color = 'mint' } = Astro.props;
+---
+<span class={`led ${color}`} aria-hidden="true"></span>
+<style>
+  .led { display: inline-block; width: 8px; height: 8px; border-radius: 50%; flex: none; }
+  .mint { background: var(--mint); box-shadow: 0 0 10px var(--mint); }
+  .amber { background: var(--amber); box-shadow: 0 0 10px var(--amber); }
+  .red { background: var(--red); box-shadow: 0 0 10px var(--red); }
+</style>

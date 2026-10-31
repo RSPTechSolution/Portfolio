@@ -1,0 +1,18 @@
+---
+const items = ['Drupal 11', 'PHP', 'FastAPI', 'Redis', 'PostgreSQL', 'Solr', 'Docker', 'AWS'];
+---
+<div class="ticker" aria-label={`Tech stack: ${items.join(', ')}`} role="img">
+  <div class="track" aria-hidden="true">
+    {[0, 1].map(() => items.map((t) => <span>{t} <b>✺</b></span>))}
+  </div>
+</div>
+
+<style>
+  .ticker { overflow: hidden; background: var(--text); color: var(--bg); rotate: -1.5deg; margin: 30px -2vw 0; }
+  .track { display: flex; width: max-content; animation: scroll 34s linear infinite; }
+  .ticker:hover .track { animation-play-state: paused; }
+  span { font: 800 clamp(28px, 3.6vw, 50px)/1 var(--disp); font-stretch: 75%; text-transform: uppercase; padding: 18px 24px; white-space: nowrap; }
+  b { color: var(--accent); font-weight: 400; }
+  @keyframes scroll { to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .track { animation: none; } }
+</style>

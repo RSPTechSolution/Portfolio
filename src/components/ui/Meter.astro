@@ -1,0 +1,5 @@
+---
+interface Props { bars?: number }
+const { bars = 12 } = Astro.props;
+---
+<div class="vu" aria-hidden="true">{Array.from({ length: bars }, () => <i />)}</div>

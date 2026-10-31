@@ -32,3 +32,18 @@ em { font-family: var(--serif); font-style: italic; font-weight: 400; color: var
 #cursor[data-mode="view"] { width: 92px; height: 92px; margin: -46px 0 0 -46px; }
 #cursor[data-mode="view"] span { opacity: 1; }
 #cursor[data-mode="hidden"] { opacity: 0; }
+
+/* Shared section styles */
+.section { padding: 130px 0; }
+.section.tight { padding-top: 20px; }
+.kicker { display: flex; gap: 12px; align-items: center; margin-bottom: 22px; }
+.h2 { font: 800 clamp(48px, 7vw, 108px)/.9 var(--disp); font-stretch: 75%; letter-spacing: -.035em; }
+.clay { border-radius: 30px; background: var(--surface); box-shadow: var(--out); }
+.is-dim { opacity: .35; filter: saturate(.2); transition: opacity .4s, filter .4s; }
+.js [data-reveal] { opacity: 0; transform: translateY(40px); }
+
+/* Level meter */
+.vu { display: flex; gap: 4px; height: 40px; align-items: end; padding: 7px; border-radius: 12px; background: var(--screen); box-shadow: inset 3px 3px 6px rgba(0,0,0,.4); }
+.vu i { flex: 1; height: 100%; border-radius: 2px; background: var(--mint); transform-origin: bottom; transform: scaleY(.3); }
+.vu i:nth-child(n+8) { background: var(--amber); }
+.vu i:nth-child(n+11) { background: var(--red); }

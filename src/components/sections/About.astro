@@ -1,0 +1,48 @@
+---
+import Meter from '../ui/Meter.astro';
+import Led from '../ui/Led.astro';
+import { profile } from '../../content/data/profile';
+const pods = [
+  { value: `${profile.years}+`, count: profile.years, suffix: '+', label: 'years in production PHP & Drupal' },
+  { value: 'D7→11', label: 'every major Drupal version' },
+  { value: '<1ms', label: 'Redis ad-decision latency' },
+  { value: '×2 ★', label: 'Rising Star ’22 · Glowing Star ’23' },
+];
+---
+<section id="about" class="section">
+  <div class="wrap">
+    <p class="kicker mono" data-reveal><Led color="amber" />About</p>
+    <h2 class="h2" data-reveal>Five years of <em>quietly</em><br />hard backend work.</h2>
+    <div class="story" data-reveal>
+      <p>I studied computer applications (BCA) in Khanna, started writing PHP and MySQL apps at HB Infotech in 2021, and have spent the years since at LN Webworks building enterprise Drupal platforms and Python services for clients around the world.</p>
+      <ul class="facts mono">
+        <li><Led />{profile.location} · <span data-ist-clock>IST</span></li>
+        <li>Speaks {profile.languages.join(' & ')}</li>
+        <li>{profile.availability}</li>
+      </ul>
+    </div>
+    <div class="pods">
+      {pods.map((p) => (
+        <div class="pod" data-reveal>
+          <Meter />
+          {p.count !== undefined ? <b data-count={p.count} data-suffix={p.suffix}>{p.value}</b> : <b>{p.value}</b>}
+          <span>{p.label}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .story { display: grid; grid-template-columns: 1.3fr 1fr; gap: 40px; margin-top: 40px; font-size: 19px; line-height: 1.5; max-width: 1100px; }
+  .facts { list-style: none; display: grid; gap: 12px; align-content: start; }
+  .facts li { display: flex; gap: 10px; align-items: center; }
+  .pods { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; margin-top: 56px; }
+  .pod { border-radius: 30px; padding: 24px; box-shadow: var(--out); color: var(--ink); }
+  .pod:nth-child(1) { background: var(--blush); } .pod:nth-child(2) { background: var(--butter); }
+  .pod:nth-child(3) { background: var(--sage); } .pod:nth-child(4) { background: var(--surface); color: var(--text); }
+  .pod b { display: block; font: 800 clamp(44px, 4.6vw, 70px)/1 var(--disp); font-stretch: 75%; letter-spacing: -.03em; margin-top: 14px; }
+  .pod span { font-size: 14.5px; }
+  @media (max-width: 960px) { .pods { grid-template-columns: 1fr 1fr; } .story { grid-template-columns: 1fr; } }
+  @media (max-width: 520px) { .pods { grid-template-columns: 1fr; } }
+</style>
