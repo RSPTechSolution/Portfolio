@@ -1,0 +1,84 @@
+---
+import { Picture } from 'astro:assets';
+import RoleControl from '../ui/RoleControl.astro';
+import portrait from '../../assets/portrait-composite.jpg';
+import { profile } from '../../content/data/profile';
+import { roles } from '../../content/data/roles';
+const all = roles[0];
+---
+<section class="hero" aria-labelledby="hero-name">
+  <div class="hero-in">
+    <div class="copy">
+      <span class="chip mono"><span class="led" aria-hidden="true"></span>{profile.availability} · flip the switch ↗</span>
+      <h1 id="hero-name" aria-label={profile.name}>
+        <span class="l" aria-hidden="true"><span>Subodh</span></span>
+        <span class="l acc" aria-hidden="true"><span>Kant.</span></span>
+      </h1>
+      <p class="lede">
+        <span class="role" data-role-title>{all.title}</span>
+        {profile.pitch}
+      </p>
+      <div class="ctl"><RoleControl /></div>
+      <div class="ctl">
+        <a class="btn solid" href="#contact">Hire me ↗</a>
+        <div class="resumes" data-role-resume data-link-class="btn">
+          {all.resumes.map((r) => <a class="btn" href={r.href} download>↓ {r.label.replace(' résumé', '')}</a>)}
+        </div>
+      </div>
+    </div>
+    <figure class="frame" data-portrait>
+      <div class="in">
+        <Picture src={portrait} formats={['avif', 'webp']} widths={[480, 720, 1000]} sizes="(max-width: 960px) 80vw, 460px"
+          alt={`Portrait of ${profile.name}`} fetchpriority="high" loading="eager" />
+        <div class="hud" aria-hidden="true"><span>● NIGHT CAM</span><span>CH-02</span></div>
+      </div>
+      <span class="tag" aria-hidden="true">{profile.years}+ yrs ✦</span>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .hero { position: relative; min-height: 100svh; display: grid; align-items: center; padding: 110px 0 60px; overflow: hidden; }
+  .hero-in { position: relative; z-index: 2; width: min(1280px, 92vw); margin: 0 auto; display: grid; grid-template-columns: 1.2fr .8fr; gap: 5vw; align-items: center; }
+  .chip { display: inline-flex; gap: 10px; align-items: center; padding: 8px 14px; border-radius: 999px; background: var(--surface); box-shadow: var(--out); }
+  .led { width: 8px; height: 8px; border-radius: 50%; background: var(--mint); box-shadow: 0 0 10px var(--mint); }
+  h1 { font: 800 clamp(84px, 13vw, 220px)/.8 var(--disp); font-stretch: 75%; letter-spacing: -.045em; text-transform: uppercase; margin-top: 24px; }
+  .l { display: block; overflow: hidden; padding-bottom: .04em; }
+  .l > span { display: inline-block; }
+  .acc { color: var(--accent); transition: color .4s; }
+  .lede { margin-top: 28px; max-width: 38ch; font-size: clamp(19px, 1.6vw, 22px); line-height: 1.4; }
+  .role { display: block; font: 500 24px/1.2 var(--serif); font-style: italic; color: var(--accent); margin-bottom: 8px; min-height: 1.2em; }
+  .ctl { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; margin-top: 26px; }
+  .resumes { display: contents; }
+  .ctl :global(.btn) { display: inline-flex; align-items: center; gap: 10px; font: 700 15px var(--disp); text-decoration: none; padding: 14px 20px; border-radius: 999px; background: var(--surface); box-shadow: var(--out); transition: transform .2s var(--ease); }
+  .ctl :global(.btn:hover) { transform: translateY(-3px); }
+  .ctl .btn.solid { background: var(--text); color: var(--bg); }
+
+  .frame { position: relative; aspect-ratio: 4 / 5; border-radius: 40px; padding: 14px; background: var(--surface); box-shadow: var(--out); }
+  .in { position: relative; width: 100%; height: 100%; border-radius: 28px; overflow: hidden; box-shadow: var(--in); }
+  :global([data-theme="night"]) .in { background: radial-gradient(ellipse, #2a1a05, #0c0a07 70%); }
+  .in :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .frame :global(canvas) { position: absolute; inset: 14px; width: calc(100% - 28px); height: calc(100% - 28px); border-radius: 28px; }
+  .hud { position: absolute; inset: 16px 18px auto; z-index: 3; display: flex; justify-content: space-between; opacity: 0; transition: opacity .4s;
+    font: 400 9.5px var(--mono); letter-spacing: .16em; color: var(--amber); text-shadow: 0 0 8px rgba(255,181,71,.7); }
+  :global([data-theme="night"]) .hud { opacity: 1; }
+  .tag { position: absolute; z-index: 4; right: -18px; bottom: 40px; padding: 10px 14px; border-radius: 16px; background: var(--accent); color: var(--on-accent); font: 700 13px var(--disp); box-shadow: var(--out); rotate: 4deg; }
+
+  @media (max-width: 960px) {
+    .hero-in { grid-template-columns: 1fr; }
+    .frame { max-width: 380px; width: 100%; margin-inline: auto; }
+  }
+</style>
+
+<script>
+  import { currentTheme, type Theme } from '../../scripts/theme';
+
+  const frame = document.querySelector<HTMLElement>('[data-portrait]')!;
+  const start = async () => {
+    const { mountPortrait } = await import('../../scripts/portrait3d');
+    const p = await mountPortrait(frame, { subject: '/img/portrait-subject.webp', bg: '/img/portrait-bg.webp' }, currentTheme());
+    if (p) document.addEventListener('themechange', (e) => p.setTheme((e as CustomEvent<{ theme: Theme }>).detail.theme));
+  };
+  if ('requestIdleCallback' in window) requestIdleCallback(() => void start(), { timeout: 1200 });
+  else setTimeout(() => void start(), 200);
+</script>

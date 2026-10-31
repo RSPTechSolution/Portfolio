@@ -1,0 +1,13 @@
+// Pointer → portrait pose (spec §6.2). Pure so it can be unit-tested without WebGL.
+// The whole card tilts a little; the subject layer drifts against the background
+// and never lifts above the frame bottom. Faces are never deformed.
+export const MAX_RY = 0.105;
+export const MAX_RX = 0.07;
+
+export function clampPose(nx: number, ny: number): { ry: number; rx: number; fx: number; fy: number } {
+  const x = Math.min(1, Math.max(0, nx)) - 0.5;
+  const y = Math.min(1, Math.max(0, ny)) - 0.5;
+  const ry = x * 2 * MAX_RY;
+  const rx = y * 2 * MAX_RX;
+  return { ry, rx, fx: ry * 0.25, fy: Math.min(0, -rx * 0.2) };
+}
