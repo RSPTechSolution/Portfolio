@@ -30,8 +30,6 @@ const ordered = roles[0].skillOrder.map((k) => skills.find((s) => s.key === k)!)
   .group { color: var(--accent-text); }
   .meter { display: block; height: 8px; border-radius: 99px; box-shadow: var(--in); overflow: hidden; margin-top: 6px; }
   .meter i { display: block; height: 100%; width: var(--v); border-radius: 99px; background: var(--accent); }
-  :global([data-role]:not([data-role="all"])) .part:not(.is-dim) { outline: 2px solid var(--accent); outline-offset: -2px; }
-  .part.is-dim { opacity: .55; filter: saturate(.4); }
   @media (max-width: 960px) { .parts { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 560px) { .parts { grid-template-columns: 1fr; } }
 </style>

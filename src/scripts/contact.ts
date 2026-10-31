@@ -36,6 +36,12 @@ function setStatus(form: HTMLFormElement, text: string, withMail = false) {
 
 const inFlight = new WeakSet<HTMLFormElement>();
 
+function timeoutSignal(ms: number): AbortSignal {
+  const c = new AbortController();
+  setTimeout(() => c.abort(), ms);
+  return c.signal;
+}
+
 export async function submitContact(form: HTMLFormElement, fetchImpl: typeof fetch = fetch): Promise<'ok' | 'error' | 'invalid'> {
   if (inFlight.has(form)) return 'invalid';
   const data = read(form);
@@ -48,10 +54,10 @@ export async function submitContact(form: HTMLFormElement, fetchImpl: typeof fet
   if (button) button.disabled = true;
   setStatus(form, 'Sending…');
   try {
-    const res = await fetchImpl(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
+    const res = await fetchImpl(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' }, signal: timeoutSignal(15_000) });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     form.reset();
-    setStatus(form, "Thanks, I'll reply within a day.");
+    setStatus(form, 'Thanks, your message is on its way.');
     return 'ok';
   } catch {
     setStatus(form, "Couldn't send. Email me at", true);

@@ -11,3 +11,8 @@ export function clampPose(nx: number, ny: number): { ry: number; rx: number; fx:
   const rx = y * 2 * MAX_RX;
   return { ry, rx, fx: ry * 0.25, fy: Math.min(0, -rx * 0.2) };
 }
+
+/** Night screen curve per layer. The subject (face) plane is always flat — spec §10. */
+export function curveFor(layer: 'front' | 'back', theme: 'day' | 'night'): number {
+  return layer === 'back' && theme === 'night' ? 0.05 : 0;
+}

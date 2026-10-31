@@ -36,6 +36,6 @@ test('non-2xx is an error', async () => {
 test('success resets form and thanks the user', async () => {
   const f = form();
   expect(await submitContact(f, vi.fn().mockResolvedValue(new Response('{"ok":true}', { status: 200 })))).toBe('ok');
-  expect(f.querySelector('[data-status]')!.textContent).toBe("Thanks, I'll reply within a day.");
+  expect(f.querySelector('[data-status]')!.textContent).toBe('Thanks, your message is on its way.');
   expect((f.elements.namedItem('message') as HTMLTextAreaElement).value).toBe('');
 });

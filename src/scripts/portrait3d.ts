@@ -3,7 +3,8 @@
 // against each other. There is no vertex displacement: the face is never deformed.
 // The static <img> stays underneath as LCP image and fallback; the opaque background plane covers it.
 import * as THREE from 'three';
-import { clampPose } from './pose';
+import { clampPose, curveFor } from './pose';
+import { watchVisibility } from './visibility';
 import type { Theme } from './theme';
 
 const vertexShader = /* glsl */ `
@@ -12,7 +13,7 @@ varying vec2 vUv;
 void main() {
   vUv = uv;
   vec3 p = position;
-  p.z -= p.x * p.x * uCurve;   // uniform screen curve at night; identical for every pixel row
+  p.z -= p.x * p.x * uCurve;   // night screen curve: background plane only (curveFor), the face plane stays flat
   gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
 }`;
 
@@ -46,9 +47,9 @@ void main() {
   gl_FragColor = vec4(col, t4.a);
 }`;
 
-const LOOK: Record<Theme, { mode: number; accent: string; curve: number }> = {
-  day: { mode: 0, accent: '#ff4a1c', curve: 0 },
-  night: { mode: 1, accent: '#ffb547', curve: 0.05 },
+const LOOK: Record<Theme, { mode: number; accent: string }> = {
+  day: { mode: 0, accent: '#ff4a1c' },
+  night: { mode: 1, accent: '#ffb547' },
 };
 
 export function hasWebGL(): boolean {
@@ -88,14 +89,16 @@ export async function mountPortrait(
 
   const shared = {
     uMode: { value: LOOK[theme].mode }, uTime: { value: 0 }, uReveal: { value: reduce ? 1.2 : 0 },
-    uAccent: { value: new THREE.Color(LOOK[theme].accent) }, uCurve: { value: LOOK[theme].curve },
+    uAccent: { value: new THREE.Color(LOOK[theme].accent) },
   };
+  const backCurve = { value: curveFor('back', theme) };
+  const frontCurve = { value: curveFor('front', theme) };
   const W = 1.76, H = 2.2;
   const geo = new THREE.PlaneGeometry(W, H, 64, 80);
-  const material = (tex: THREE.Texture) => new THREE.ShaderMaterial({ uniforms: { ...shared, uTex: { value: tex } }, vertexShader, fragmentShader, transparent: true });
+  const material = (tex: THREE.Texture, uCurve: { value: number }) => new THREE.ShaderMaterial({ uniforms: { ...shared, uCurve, uTex: { value: tex } }, vertexShader, fragmentShader, transparent: true });
   const card = new THREE.Group();
-  const back = new THREE.Mesh(geo, material(bg));
-  const front = new THREE.Mesh(geo, material(subject));
+  const back = new THREE.Mesh(geo, material(bg, backCurve));
+  const front = new THREE.Mesh(geo, material(subject, frontCurve));
   back.position.z = -0.45; back.scale.setScalar(1.4);
   front.position.z = 0.05; front.scale.setScalar(1.06);   // overscan: edges never show
   front.renderOrder = 1;
@@ -123,11 +126,7 @@ export async function mountPortrait(
   const onMove = (e: PointerEvent) => Object.assign(target, clampPose((e.clientX - rect.left) / rect.width, (e.clientY - rect.top) / rect.height));
   if (fine && !reduce) addEventListener('pointermove', onMove);
 
-  let visible = true;
-  const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; });
-  io.observe(frame);
-  const onVis = () => { visible = !document.hidden; };
-  document.addEventListener('visibilitychange', onVis);
+  const vis = watchVisibility(frame);
 
   function fallback() {
     renderer.setAnimationLoop(null);
@@ -141,7 +140,7 @@ export async function mountPortrait(
     const clock = new THREE.Clock();
     const start = performance.now();
     renderer.setAnimationLoop(() => {
-      if (!visible) return;
+      if (!vis.v.active()) return;
       const t = clock.getElapsedTime();
       const k = Math.min((performance.now() - start) / 2200, 1);
       shared.uReveal.value = k < 1 ? (1 - Math.pow(1 - k, 3)) * 1.02 : 1.2;
@@ -158,15 +157,15 @@ export async function mountPortrait(
     setTheme(t: Theme) {
       shared.uMode.value = LOOK[t].mode;
       shared.uAccent.value.set(LOOK[t].accent);
-      shared.uCurve.value = LOOK[t].curve;
+      backCurve.value = curveFor('back', t);
+      frontCurve.value = curveFor('front', t);
       if (reduce) render();
     },
     destroy() {
       renderer.setAnimationLoop(null);
-      ro.disconnect(); io.disconnect();
+      ro.disconnect(); vis.stop();
       removeEventListener('pointermove', onMove);
       removeEventListener('scroll', onScroll);
-      document.removeEventListener('visibilitychange', onVis);
       renderer.dispose(); canvas.remove();
     },
   };

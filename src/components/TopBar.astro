@@ -29,6 +29,9 @@ const links = [
     .menu { display: block; }
     ul { display: none; position: absolute; top: calc(100% + 10px); left: 50%; translate: -50% 0; flex-direction: column; border-radius: 22px; min-width: 180px; }
     .menu[aria-expanded="true"] + ul { display: flex; }
+    /* Without JS the menu button can't work: show the links inline instead. */
+    :global(html:not(.js)) .menu { display: none; }
+    :global(html:not(.js)) ul { display: flex; position: static; translate: none; flex-direction: row; flex-wrap: wrap; min-width: 0; border-radius: 22px; }
   }
 </style>
 

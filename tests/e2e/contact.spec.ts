@@ -12,7 +12,7 @@ test('success path', async ({ page }) => {
   await page.route('**/formspree.io/**', (r) => r.fulfill({ status: 200, body: '{"ok":true}', contentType: 'application/json' }));
   await fill(page);
   await page.getByRole('button', { name: 'Send message' }).click();
-  await expect(page.getByText("Thanks, I'll reply within a day.")).toBeVisible();
+  await expect(page.getByText('Thanks, your message is on its way.')).toBeVisible();
 });
 
 test('error path keeps input', async ({ page }) => {

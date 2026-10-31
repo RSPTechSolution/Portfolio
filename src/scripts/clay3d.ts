@@ -2,6 +2,7 @@
 // Day: matte clay. Night: glossy rubber with an amber rim light. Materials lerp on theme change.
 import * as THREE from 'three';
 import { hasWebGL } from './portrait3d';
+import { watchVisibility } from './visibility';
 import type { Theme } from './theme';
 
 export type ClayKind = 'torus' | 'sphere' | 'blob' | 'knob' | 'key' | 'led';
@@ -86,11 +87,7 @@ export function mountClay(canvas: HTMLCanvasElement, layout: ClayItem[], theme: 
   const mouse = { x: 0, y: 0 };
   const onMove = (e: PointerEvent) => { mouse.x = e.clientX / innerWidth - 0.5; mouse.y = e.clientY / innerHeight - 0.5; };
   if (fine && !reduce) addEventListener('pointermove', onMove, { passive: true });
-  let visible = true;
-  const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; });
-  io.observe(canvas);
-  const onVis = () => { visible = !document.hidden; };
-  document.addEventListener('visibilitychange', onVis);
+  const vis = watchVisibility(canvas);
 
   const clock = new THREE.Clock();
   const start = performance.now();
@@ -116,7 +113,7 @@ export function mountClay(canvas: HTMLCanvasElement, layout: ClayItem[], theme: 
     render();
   }
   resize();
-  if (!reduce) renderer.setAnimationLoop(() => { if (visible) frame(false); });
+  if (!reduce) renderer.setAnimationLoop(() => { if (vis.v.active()) frame(false); });
 
   return {
     setTheme(t: Theme) {
@@ -125,8 +122,8 @@ export function mountClay(canvas: HTMLCanvasElement, layout: ClayItem[], theme: 
       if (reduce) frame(true);
     },
     destroy() {
-      renderer.setAnimationLoop(null); ro.disconnect(); io.disconnect();
-      removeEventListener('pointermove', onMove); document.removeEventListener('visibilitychange', onVis);
+      renderer.setAnimationLoop(null); ro.disconnect(); vis.stop();
+      removeEventListener('pointermove', onMove);
       renderer.dispose();
     },
   };

@@ -39,7 +39,11 @@ em { font-family: var(--serif); font-style: italic; font-weight: 400; color: var
 .kicker { display: flex; gap: 12px; align-items: center; margin-bottom: 22px; }
 .h2 { font: 800 clamp(48px, 7vw, 108px)/.9 var(--disp); font-stretch: 75%; letter-spacing: -.035em; }
 .clay { border-radius: 30px; background: var(--surface); box-shadow: var(--out); }
-.is-dim { opacity: .35; filter: saturate(.2); transition: opacity .4s, filter .4s; }
+/* Role dimming (spec §4) without breaking AA (spec §8): text keeps full contrast,
+   only decoration fades. Highlighted items get an accent outline instead. */
+.is-dim { box-shadow: none !important; filter: grayscale(.9); transition: box-shadow .4s, filter .4s; }
+.is-dim :is(.meter, .vu, .num, .medal, .cap, .big) { opacity: .3; transition: opacity .4s; }
+html:not([data-role="all"]) [data-roles]:not(.is-dim) { outline: 2px solid var(--accent); outline-offset: 3px; }
 .js [data-reveal] { opacity: 0; transform: translateY(40px); }
 
 /* Level meter */
