@@ -1,7 +1,7 @@
 ---
-title: PotatoPro Enterprise Platform
-slug: potatopro
-summary: An enterprise B2B platform and directory for the global potato industry, built on Drupal 10.
+title: Enterprise B2B Directory Platform
+slug: enterprise-b2b-platform
+summary: An enterprise B2B platform and business directory for a global industry, built on Drupal 10.
 stack: [Drupal 10, PHP, Search API, Solr / OpenSearch, Redis, Twig, Composer, Drush, MySQL]
 roles: [drupal, php, all]
 order: 1
@@ -9,7 +9,7 @@ order: 1
 
 ## Problem
 
-The global potato industry needed one place for news, a business directory, company pages and inquiries, with search that stays fast as content grows.
+A global industry needed one place for news, a business directory, company pages and inquiries, with search that stays fast as content grows.
 
 ## My role
 
@@ -25,4 +25,4 @@ Drupal 10, PHP, Search API, Solr/OpenSearch, Redis, Twig, Composer, Drush, MySQL
 
 ## Outcome
 
-Live at potatopro.com. The project received a special award and appreciation after completion.
+A production platform serving an international business audience. The project received a special award and appreciation after completion.

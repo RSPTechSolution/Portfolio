@@ -8,19 +8,16 @@ import '../styles/tokens.css';
 import '../styles/global.css';
 import displayFont from '@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wdth-normal.woff2?url';
 
-interface Props { title: string; description: string }
-const { title, description } = Astro.props;
+import Seo, { type SeoProps } from '../components/Seo.astro';
+interface Props { seo: SeoProps }
+const { seo } = Astro.props;
 ---
 <!doctype html>
 <html lang="en" data-theme="day" data-role="all">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title}</title>
-    <meta name="description" content={description} />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <Seo {...seo} />
     <link rel="preload" href={displayFont} as="font" type="font/woff2" crossorigin />
     <script is:inline>
       (function () {

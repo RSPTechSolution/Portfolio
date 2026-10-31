@@ -16,3 +16,9 @@ export function clampPose(nx: number, ny: number): { ry: number; rx: number; fx:
 export function curveFor(layer: 'front' | 'back', theme: 'day' | 'night'): number {
   return layer === 'back' && theme === 'night' ? 0.05 : 0;
 }
+
+/** Touch devices have no pointer: tilt follows a slow idle sway plus scroll progress (0..1 through the hero). */
+export function touchPose(t: number, scrollProgress: number) {
+  const s = Math.min(1, Math.max(0, scrollProgress));
+  return clampPose(0.5 + Math.sin(t * 0.35) * 0.35, 0.5 + s * 0.4 + Math.cos(t * 0.27) * 0.1);
+}

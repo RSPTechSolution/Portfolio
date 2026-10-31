@@ -10,7 +10,7 @@ const all = roles[0];
   <canvas id="clay" aria-hidden="true"></canvas>
   <div class="hero-in">
     <div class="copy">
-      <span class="chip mono"><span class="led" aria-hidden="true"></span>{profile.availability} · flip the switch ↗</span>
+      <span class="chip mono"><span class="led" aria-hidden="true"></span><span class="long">{profile.availability} · flip the switch ↗</span><span class="short">Open to work · flip the switch ↗</span></span>
       <h1 id="hero-name" aria-label={profile.name}>
         <span class="l" aria-hidden="true"><span>Subodh</span></span>
         <span class="l acc" aria-hidden="true"><span>Kant.</span></span>
@@ -71,6 +71,14 @@ const all = roles[0];
   :global([data-theme="night"]) .hud { opacity: 1; }
   .tag { position: absolute; z-index: 4; right: -18px; bottom: 40px; padding: 10px 14px; border-radius: 16px; background: var(--accent); color: var(--on-accent); font: 700 13px var(--disp); box-shadow: var(--out); rotate: 4deg; }
 
+  .short { display: none; }
+  @media (max-width: 640px) {
+    .long { display: none; }
+    .short { display: inline; }
+    .chip { font-size: 10px; letter-spacing: .1em; }
+    .ctl { gap: 10px; margin-top: 20px; }
+    .ctl :global(.btn) { font-size: 14px; padding: 11px 15px; }
+  }
   @media (max-width: 960px) {
     .hero-in { grid-template-columns: 1fr; }
     .frame { max-width: 380px; width: 100%; margin-inline: auto; }
@@ -84,19 +92,26 @@ const all = roles[0];
   const frame = document.querySelector<HTMLElement>('[data-portrait]')!;
   const clayCanvas = document.getElementById('clay') as HTMLCanvasElement;
   const start = async () => {
-    const { mountClay, HERO_LAYOUT } = await import('../../scripts/clay3d');
-    const clay = mountClay(clayCanvas, HERO_LAYOUT, currentTheme());
+    const { mountClay, HERO_LAYOUT, MOBILE_LAYOUT } = await import('../../scripts/clay3d');
+    const small = matchMedia('(max-width: 768px)').matches;
+    const clay = mountClay(clayCanvas, small ? MOBILE_LAYOUT : HERO_LAYOUT, currentTheme());
     if (clay) document.addEventListener('themechange', (e) => clay.setTheme((e as CustomEvent<{ theme: Theme }>).detail.theme));
     const { mountPortrait } = await import('../../scripts/portrait3d');
     const p = await mountPortrait(frame, { subject: '/img/portrait-subject.webp', bg: '/img/portrait-bg.webp' }, currentTheme());
+    if (p) document.documentElement.classList.add('has-3d');
     if (p) document.addEventListener('themechange', (e) => p.setTheme((e as CustomEvent<{ theme: Theme }>).detail.theme));
   };
-  // WebGL only where it adds something (pointer tilt) and the device can afford it.
-  // Touch/small screens keep the static photo; night mode there is a CSS treatment.
-  const desktop = matchMedia('(hover: hover) and (pointer: fine) and (min-width: 769px)').matches;
-  if (desktop) {
-    document.documentElement.classList.add('has-3d');
-    const go = () => ('requestIdleCallback' in window ? requestIdleCallback(() => void start(), { timeout: 1500 }) : setTimeout(() => void start(), 200));
-    if (document.readyState === 'complete') go(); else addEventListener('load', go, { once: true });
-  }
+  // 3D on every device, started after the page has loaded so it never competes with first paint.
+  // Touch screens tilt with scroll + idle sway (portrait3d.ts); html.has-3d is set only once WebGL works.
+  let started = false;
+  const run = () => { if (!started) { started = true; void start(); } };
+  const idle = () => ('requestIdleCallback' in window ? requestIdleCallback(run, { timeout: 1500 }) : setTimeout(run, 200));
+  // Touch devices have slower CPUs: wait for the first touch/scroll, or 4 s after load, so 3D never blocks first input.
+  const touch = matchMedia('(pointer: coarse)').matches;
+  const go = () => {
+    if (!touch) { idle(); return; }
+    ['touchstart', 'scroll', 'pointerdown'].forEach((ev) => addEventListener(ev, idle, { once: true, passive: true }));
+    setTimeout(idle, 4000);
+  };
+  if (document.readyState === 'complete') go(); else addEventListener('load', go, { once: true });
 </script>
