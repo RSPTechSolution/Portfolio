@@ -1,0 +1,31 @@
+---
+import '@fontsource-variable/bricolage-grotesque/standard.css';
+import '@fontsource/newsreader/400-italic.css';
+import '@fontsource/newsreader/500-italic.css';
+import '@fontsource/martian-mono/300.css';
+import '@fontsource/martian-mono/400.css';
+import '@fontsource/martian-mono/600.css';
+import '../styles/tokens.css';
+import '../styles/global.css';
+
+interface Props { title: string; description: string }
+const { title, description } = Astro.props;
+---
+<!doctype html>
+<html lang="en" data-theme="day" data-role="all">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script is:inline>document.documentElement.classList.add('js');</script>
+  </head>
+  <body>
+    <slot name="topbar" />
+    <slot />
+    <div id="cursor" aria-hidden="true"></div>
+  </body>
+</html>

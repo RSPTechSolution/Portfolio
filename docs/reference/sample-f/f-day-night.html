@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en" data-theme="day">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sample F — Day / Night · Subodh Kant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Newsreader:ital,opsz,wght@1,6..72,400;1,6..72,500&family=Martian+Mono:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --disp:'Bricolage Grotesque',system-ui,sans-serif; --serif:'Newsreader',Georgia,serif; --mono:'Martian Mono',monospace;
+  --ease:cubic-bezier(.2,.7,.1,1);
+  --red:#ff4a1c; --amber:#ffb547; --mint:#6fe3a4;
+}
+[data-theme="day"]{
+  --bg:#f0ebe3; --surface:#f5f0e9; --text:#151411; --muted:#6f665b; --accent:var(--red); --line:#151411;
+  --out:14px 18px 34px rgba(110,85,60,.24),-10px -10px 24px rgba(255,255,255,.85),inset -6px -8px 14px rgba(120,95,70,.12),inset 6px 6px 12px rgba(255,255,255,.75);
+  --in:inset 6px 6px 12px rgba(120,95,70,.25),inset -6px -6px 12px rgba(255,255,255,.9);
+}
+[data-theme="night"]{
+  --bg:#1b1916; --surface:#24211d; --text:#ede4d4; --muted:#9a9082; --accent:var(--amber); --line:#3a352d;
+  --out:10px 10px 24px #100f0c,-8px -8px 20px #2f2b25;
+  --in:inset 6px 6px 12px #100f0c,inset -5px -5px 10px #2f2b25;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg);color:var(--text)}
+body{font:17px/1.55 var(--disp);overflow-x:clip}
+a{color:inherit}
+em{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--accent)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:4px;border-radius:10px}
+.mono{font:400 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.wrap{width:min(1280px,92vw);margin-inline:auto}
+.led{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--mint);box-shadow:0 0 10px var(--mint)}
+
+/* view transition: circular reveal from the switch */
+::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
+
+/* top */
+.top{position:fixed;inset:0 0 auto;z-index:30;display:flex;justify-content:space-between;align-items:center;padding:16px 4vw}
+.top .id{font:800 20px var(--disp);font-stretch:75%;text-decoration:none;letter-spacing:.02em}
+.top nav{display:flex;gap:6px;padding:6px;border-radius:999px;background:var(--surface);box-shadow:var(--out)}
+.top nav a{text-decoration:none;font-weight:600;font-size:14px;padding:8px 14px;border-radius:999px}
+.top nav a:hover{box-shadow:var(--in)}
+
+/* the power switch */
+.power{display:flex;align-items:center;gap:12px}
+.rocker{position:relative;width:96px;height:48px;border-radius:999px;border:0;cursor:pointer;background:var(--surface);box-shadow:var(--in)}
+.rocker .thumb{position:absolute;top:6px;left:6px;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-size:16px;
+  background:radial-gradient(circle at 35% 30%,#ffd27a,#f6b21e 60%,#c88a08);box-shadow:inset -4px -5px 8px rgba(120,70,0,.4),inset 3px 3px 6px rgba(255,255,255,.55),4px 6px 12px rgba(0,0,0,.25);transition:transform .6s cubic-bezier(.3,1.5,.4,1),background .4s}
+[data-theme="night"] .rocker .thumb{transform:translateX(48px);background:radial-gradient(circle at 35% 30%,#5a554b,#2c2924);box-shadow:0 0 18px rgba(255,181,71,.45),inset 2px 2px 4px rgba(255,255,255,.12)}
+.rocker .thumb::after{content:"☀"}
+[data-theme="night"] .rocker .thumb::after{content:"☾";color:var(--amber)}
+
+/* hero */
+.hero{position:relative;min-height:100svh;overflow:hidden;display:grid;align-items:center;padding:110px 0 60px}
+#clay{position:absolute;inset:0;width:100%;height:100%}
+.hero-in{position:relative;z-index:2;width:min(1280px,92vw);margin:0 auto;display:grid;grid-template-columns:1.2fr .8fr;gap:5vw;align-items:center}
+.shift{display:inline-flex;gap:10px;align-items:center;padding:8px 14px;border-radius:999px;background:var(--surface);box-shadow:var(--out)}
+h1{font:800 clamp(84px,13vw,220px)/.8 var(--disp);font-stretch:75%;letter-spacing:-.045em;text-transform:uppercase;margin-top:24px}
+h1 span{display:block}
+h1 .acc{color:var(--accent);transition:color .4s}
+.lede{margin-top:28px;max-width:36ch;font-size:clamp(19px,1.6vw,22px);line-height:1.4}
+.lede .role{display:block;font:500 24px/1.2 var(--serif);font-style:italic;color:var(--accent);margin-bottom:8px;min-height:1.2em}
+.row-ctl{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:30px}
+.seg{position:relative;display:inline-flex;padding:6px;border-radius:999px;background:var(--surface);box-shadow:var(--in)}
+.seg button{position:relative;z-index:1;border:0;background:none;font:700 14px var(--disp);padding:10px 16px;border-radius:999px;cursor:pointer;color:var(--text);transition:color .35s}
+.seg button[aria-pressed="true"]{color:#fff}
+[data-theme="night"] .seg button[aria-pressed="true"]{color:#1b1916}
+.seg .pill{position:absolute;top:6px;bottom:6px;left:0;border-radius:999px;background:var(--accent);box-shadow:inset -3px -4px 8px rgba(0,0,0,.25),inset 3px 3px 6px rgba(255,255,255,.35);transition:transform .55s var(--ease),width .55s var(--ease),background .4s}
+.btn{display:inline-flex;align-items:center;gap:10px;font:700 15px var(--disp);text-decoration:none;padding:15px 22px;border-radius:999px;background:var(--surface);box-shadow:var(--out);transition:transform .2s}
+.btn:hover{transform:translateY(-3px)}
+.btn.solid{background:var(--text);color:var(--bg)}
+
+.frame{position:relative;aspect-ratio:4/5;border-radius:40px;padding:14px;background:var(--surface);box-shadow:var(--out)}
+.frame .in{position:relative;width:100%;height:100%;border-radius:28px;overflow:hidden;box-shadow:var(--in);transition:background .5s}
+[data-theme="night"] .frame .in{background:radial-gradient(ellipse,#2a1a05,#0c0a07 70%)}
+.frame canvas{width:100%;height:100%;display:block}
+.frame .hud{position:absolute;inset:16px 18px auto;display:flex;justify-content:space-between;z-index:1;opacity:0;transition:opacity .4s;font:400 9.5px var(--mono);letter-spacing:.16em;color:var(--amber);text-shadow:0 0 8px rgba(255,181,71,.7)}
+[data-theme="night"] .frame .hud{opacity:1}
+.frame .tag{position:absolute;right:-18px;bottom:40px;padding:10px 14px;border-radius:16px;background:var(--accent);color:#fff;font:700 13px var(--disp);box-shadow:var(--out);rotate:4deg}
+[data-theme="night"] .frame .tag{color:#1b1916}
+
+/* two shifts */
+section{padding:130px 0}
+h2{font:800 clamp(48px,7vw,108px)/.9 var(--disp);font-stretch:75%;letter-spacing:-.035em}
+.shifts{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:56px}
+.card{position:relative;border-radius:34px;padding:38px;min-height:420px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;transition:opacity .4s,filter .4s}
+.card.day{background:#f6c445;color:#151411;box-shadow:inset -10px -12px 22px rgba(150,100,0,.25),inset 10px 10px 18px rgba(255,255,255,.5),14px 18px 34px rgba(0,0,0,.2)}
+.card.night{background:#14120e;color:#ede4d4;box-shadow:inset 0 0 0 1px #2e2a24,14px 18px 34px rgba(0,0,0,.35)}
+.card h3{font:800 clamp(34px,3.6vw,52px)/.95 var(--disp);font-stretch:75%;letter-spacing:-.03em;margin:14px 0 14px}
+.card ul{list-style:none;display:grid;gap:8px;font-size:16px}
+.card ul li::before{content:"→ ";opacity:.6}
+.card .big{position:absolute;right:-10px;bottom:-40px;font:800 220px/1 var(--disp);font-stretch:75%;opacity:.12;pointer-events:none}
+.card.night .mono{color:var(--amber)}
+.card.night .vu{display:flex;gap:4px;height:46px;align-items:end;margin-top:20px;padding:8px;border-radius:12px;background:#0b0a08}
+.vu i{flex:1;height:30%;border-radius:2px;background:var(--mint)}
+.vu i:nth-child(n+9){background:var(--amber)}.vu i:nth-child(n+12){background:var(--red)}
+.is-dim{opacity:.35;filter:saturate(.2)}
+
+/* work rows */
+.rows{margin-top:56px;border-top:2px solid var(--line)}
+.row{position:relative;display:grid;grid-template-columns:60px 1.3fr 1fr;gap:24px;align-items:center;padding:32px 10px;border-bottom:2px solid var(--line);text-decoration:none;isolation:isolate;transition:color .3s,opacity .4s,filter .4s}
+.row::before{content:"";position:absolute;inset:0;z-index:-1;background:var(--accent);transform:scaleY(0);transform-origin:bottom;transition:transform .5s var(--ease)}
+.row:hover::before{transform:scaleY(1)}
+.row:hover{color:var(--bg)}
+.row h3{font:800 clamp(30px,3.6vw,54px)/.95 var(--disp);font-stretch:75%;letter-spacing:-.03em}
+
+.contact{text-align:center;padding:170px 0 140px}
+.contact h2{font-size:clamp(70px,13vw,210px)}
+.contact .btn{margin-top:44px;font-size:20px;padding:22px 34px}
+footer{display:flex;justify-content:space-between;padding:24px 4vw}
+
+/* cursor: blend dot, grows to a label over work rows */
+.cursor{position:fixed;left:0;top:0;width:18px;height:18px;margin:-9px 0 0 -9px;border-radius:50%;background:#fff;mix-blend-mode:difference;pointer-events:none;z-index:200;display:none;place-items:center;transition:width .35s var(--ease),height .35s var(--ease),margin .35s var(--ease)}
+.cursor span{font:600 11px var(--mono);color:#000;opacity:0;transition:opacity .2s}
+.cursor.big{width:92px;height:92px;margin:-46px 0 0 -46px}.cursor.big span{opacity:1}
+.cursor.link{width:50px;height:50px;margin:-25px 0 0 -25px}
+@media (hover:hover) and (pointer:fine){ .cursor{display:grid} body,a,button{cursor:none} }
+
+.js [data-reveal]{opacity:0;transform:translateY(40px)}
+@media (max-width:960px){
+  .hero-in,.shifts{grid-template-columns:1fr}
+  .frame{max-width:360px}
+  .row{grid-template-columns:40px 1fr}.row p{display:none}
+  .top nav{display:none}
+}
+@media (prefers-reduced-motion:reduce){ *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important} }
+</style>
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+<div class="cursor" aria-hidden="true"><span>VIEW</span></div>
+
+<header class="top">
+  <a class="id" href="#top">SUBODH KANT</a>
+  <nav><a href="#shifts">Two shifts</a><a href="#work">Work</a><a href="#contact">Contact</a></nav>
+  <div class="power"><span class="mono" id="modeLabel">Day shift</span><button class="rocker" id="power" aria-pressed="false" aria-label="Switch to night shift"><span class="thumb" aria-hidden="true"></span></button></div>
+</header>
+
+<main id="top">
+  <div class="hero">
+    <canvas id="clay" aria-hidden="true"></canvas>
+    <div class="hero-in">
+      <div>
+        <span class="shift mono"><span class="led"></span>Open to work · flip the switch ↗</span>
+        <h1 aria-label="Subodh Kant"><span aria-hidden="true">Subodh</span><span class="acc" aria-hidden="true">Kant.</span></h1>
+        <p class="lede"><span class="role" data-role-title>Backend &amp; Drupal Engineer</span>By day, I build enterprise Drupal platforms. By night, real-time Python backends.</p>
+        <div class="row-ctl">
+          <div class="seg" role="group" aria-label="View portfolio as"><span class="pill" aria-hidden="true"></span><button data-role-btn="all">All</button><button data-role-btn="drupal">Drupal</button><button data-role-btn="php">PHP</button><button data-role-btn="backend">Backend</button></div>
+        </div>
+        <div class="row-ctl"><a class="btn solid" href="#contact">Hire me ↗</a><a class="btn" href="#" data-role-resume>↓ <span>All three résumés</span></a></div>
+      </div>
+      <figure class="frame" data-reveal>
+        <div class="in"><div class="hud" aria-hidden="true"><span>● NIGHT CAM</span><span>CH-02</span></div><canvas id="portrait" aria-hidden="true"></canvas></div>
+        <span class="tag">5+ yrs ✦</span>
+      </figure>
+    </div>
+  </div>
+
+  <section id="shifts">
+    <div class="wrap">
+      <p class="mono" data-reveal>Two shifts, one engineer</p>
+      <h2 data-reveal>What I <em>do</em>.</h2>
+      <div class="shifts">
+        <article class="card day" data-reveal data-roles="drupal php">
+          <div><span class="mono" style="color:inherit">☀ Day shift · CMS</span><h3>Enterprise Drupal platforms</h3>
+          <ul><li>Custom modules on Drupal 7 to 11</li><li>Views, Webforms, Layout Builder, Twig</li><li>Search API with Solr/OpenSearch</li><li>Upgrades and migrations</li></ul></div>
+          <span class="big" aria-hidden="true">D</span>
+        </article>
+        <article class="card night" data-reveal data-roles="backend">
+          <div><span class="mono">☾ Night shift · systems</span><h3>Real-time backends</h3>
+          <ul><li>FastAPI microservices</li><li>Redis caching, queues and events</li><li>PostgreSQL analytics schemas</li><li>Docker, AWS and CI/CD</li></ul>
+          <div class="vu" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+          <span class="big" aria-hidden="true">{ }</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="work" style="padding-top:10px">
+    <div class="wrap">
+      <p class="mono" data-reveal>Selected work</p>
+      <h2 data-reveal>Things I've <em>shipped</em>.</h2>
+      <div class="rows">
+        <a class="row" href="#" data-view data-roles="drupal php"><span class="mono">01</span><h3>PotatoPro Platform</h3><p>Enterprise B2B directory on Drupal 10, with AI integrations and Solr search.</p></a>
+        <a class="row" href="#" data-view data-roles="backend"><span class="mono">02</span><h3>Ads Delivery System</h3><p>FastAPI and Redis engine making ad decisions in under a millisecond.</p></a>
+        <a class="row" href="#" data-view data-roles="drupal"><span class="mono">03</span><h3>D7 → D10 Migrations</h3><p>Legacy sites, moved without the drama.</p></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <p class="mono" data-reveal>Day or night</p>
+    <h2 data-reveal>Let's <em>talk.</em></h2>
+    <a class="btn solid" href="mailto:RATANP256@gmail.com" data-reveal>RATANP256@gmail.com ↗</a>
+  </section>
+</main>
+<footer class="mono"><span>© 2026 Subodh Kant</span><span>Ludhiana · IN</span><span>Sample F — Day / Night</span></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js"}}</script>
+<script type="module">
+import { createPortrait } from './portrait3d.js';
+import { createClay } from './clay3d.js';
+import { initRoles } from './roles.js';
+
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const fine = matchMedia('(hover:hover) and (pointer:fine)').matches;
+const root = document.documentElement;
+
+const LOOKS = {
+  day:   { clay: ['#ff4a1c', '#f6c445', '#a8c69f', '#f4b6a6', '#151411'], rubber: false, portrait: { mode: 3, ink: '#151411', accent: '#ff4a1c', paper: '#f0ebe3', curve: 0 } },
+  night: { clay: ['#ffb547', '#ff5a36', '#3a362f', '#2a2722', '#ede4d4'], rubber: true,  portrait: { mode: 2, ink: '#151411', accent: '#ffb547', paper: '#1b1916', curve: 0.05 } },
+};
+
+const portraitP = createPortrait(document.getElementById('portrait'), { mode: 'natural', ink: '#151411', accent: '#ff4a1c', paper: '#f0ebe3', depth: 0, fit: 0.9, layers: true });
+const clay = createClay(document.getElementById('clay'), {
+  palette: LOOKS.day.clay,
+  layout: [['torus', 0, -5.4, 2.8, -2, 0.9], ['knob', 4, 5.4, 3, -2], ['sphere', 1, 0.8, -3.7, -2, 0.8], ['key', 2, -5.2, -2.6, -1], ['blob', 3, 6, -2.4, -1, 0.75], ['led', 0, -1.4, 3.9, -3]],
+  accent: '#ffb547',
+});
+
+async function setTheme(t) {
+  root.dataset.theme = t;
+  const L = LOOKS[t];
+  clay.setLook(L.clay, L.rubber);
+  const { uniforms: u } = await portraitP;
+  u.uMode.value = L.portrait.mode; u.uCurve.value = L.portrait.curve;
+  u.uInk.value.set(L.portrait.ink); u.uAccent.value.set(L.portrait.accent); u.uPaper.value.set(L.portrait.paper);
+  const power = document.getElementById('power');
+  power.setAttribute('aria-pressed', String(t === 'night'));
+  power.setAttribute('aria-label', t === 'night' ? 'Switch to day shift' : 'Switch to night shift');
+  document.getElementById('modeLabel').textContent = t === 'night' ? 'Night shift' : 'Day shift';
+  movePill();
+}
+
+document.getElementById('power').addEventListener('click', (e) => {
+  const next = root.dataset.theme === 'day' ? 'night' : 'day';
+  if (!document.startViewTransition || reduce) { setTheme(next); return; }
+  const r = e.currentTarget.getBoundingClientRect();
+  const x = r.left + r.width / 2, y = r.top + r.height / 2;
+  const end = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+  document.startViewTransition(() => setTheme(next)).ready.then(() => {
+    root.animate({ clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${end}px at ${x}px ${y}px)`] }, { duration: 900, easing: 'cubic-bezier(.7,0,.2,1)', pseudoElement: '::view-transition-new(root)' });
+  });
+});
+
+const pill = document.querySelector('.seg .pill');
+let role = 'all';
+function movePill() { const b = document.querySelector(`.seg [data-role-btn="${role}"]`); pill.style.width = b.offsetWidth + 'px'; pill.style.transform = `translateX(${b.offsetLeft}px)`; }
+initRoles({ onChange: (r) => { role = r; movePill(); } });
+
+gsap.registerPlugin(ScrollTrigger);
+if (reduce) {
+  gsap.set('[data-reveal]', { opacity: 1, y: 0 }); gsap.set('.vu i', { height: '70%' });
+} else {
+  gsap.from('h1 span', { yPercent: 70, opacity: 0, stagger: 0.12, duration: 1.3, ease: 'expo.out' });
+  gsap.utils.toArray('[data-reveal]').forEach((el) => gsap.to(el, { opacity: 1, y: 0, duration: 1.1, ease: 'expo.out', scrollTrigger: { trigger: el, start: 'top 90%' } }));
+  const tl = gsap.timeline({ repeat: -1, paused: true });
+  tl.to('.vu i', { height: () => 15 + Math.random() * 85 + '%', duration: 0.2, stagger: 0.015, repeatRefresh: true });
+  ScrollTrigger.create({ trigger: '.vu', start: 'top bottom', end: 'bottom top', onToggle: (s) => (s.isActive ? tl.play() : tl.pause()) });
+}
+
+if (fine && !reduce) {
+  const c = document.querySelector('.cursor');
+  const xTo = gsap.quickTo(c, 'x', { duration: 0.35, ease: 'power3' }), yTo = gsap.quickTo(c, 'y', { duration: 0.35, ease: 'power3' });
+  addEventListener('pointermove', (e) => {
+    xTo(e.clientX); yTo(e.clientY);
+    const view = e.target.closest('[data-view]'), link = e.target.closest('a,button');
+    c.classList.toggle('big', !!view); c.classList.toggle('link', !view && !!link);
+  });
+}
+</script>
+</body>
+</html>

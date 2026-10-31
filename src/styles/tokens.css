@@ -1,0 +1,45 @@
+/* Design tokens: the only place colours, shadows and timings are defined (spec §3). */
+:root {
+  --disp: 'Bricolage Grotesque Variable', system-ui, sans-serif;
+  --serif: 'Newsreader', Georgia, serif;
+  --mono: 'Martian Mono', ui-monospace, monospace;
+  --ease: cubic-bezier(.2, .7, .1, 1);
+  --ease-switch: cubic-bezier(.7, 0, .2, 1);
+
+  --red: #ff4a1c;
+  --amber: #ffb547;
+  --mint: #6fe3a4;
+  --butter: #f6c445;
+  --sage: #a8c69f;
+  --blush: #f4b6a6;
+  --ink: #151411;
+  --screen: #14120e;
+  --cream: #ede4d4;
+}
+
+[data-theme="day"] {
+  --bg: #f0ebe3;
+  --surface: #f5f0e9;
+  --text: #151411;
+  --muted: #6f665b;
+  --accent: var(--red);
+  --on-accent: #ffffff;
+  --line: #151411;
+  --out: 14px 18px 34px rgba(110, 85, 60, .24), -10px -10px 24px rgba(255, 255, 255, .85),
+         inset -6px -8px 14px rgba(120, 95, 70, .12), inset 6px 6px 12px rgba(255, 255, 255, .75);
+  --in: inset 6px 6px 12px rgba(120, 95, 70, .25), inset -6px -6px 12px rgba(255, 255, 255, .9);
+  color-scheme: light;
+}
+
+[data-theme="night"] {
+  --bg: #1b1916;
+  --surface: #24211d;
+  --text: #ede4d4;
+  --muted: #9a9082;
+  --accent: var(--amber);
+  --on-accent: #1b1916;
+  --line: #3a352d;
+  --out: 10px 10px 24px #100f0c, -8px -8px 20px #2f2b25;
+  --in: inset 6px 6px 12px #100f0c, inset -5px -5px 10px #2f2b25;
+  color-scheme: dark;
+}
