@@ -34,5 +34,9 @@ const { title, description } = Astro.props;
     <slot name="topbar" />
     <slot />
     <div id="cursor" aria-hidden="true"></div>
+    <script>
+      import { initCursor } from '../scripts/cursor';
+      initCursor();
+    </script>
   </body>
 </html>

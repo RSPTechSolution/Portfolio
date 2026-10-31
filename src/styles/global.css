@@ -19,3 +19,16 @@ em { font-family: var(--serif); font-style: italic; font-weight: 400; color: var
 
 /* Day/night circular reveal: the new snapshot is clipped by theme.ts */
 ::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+
+/* Custom cursor (spec §6.4): only active when html.has-cursor is set by cursor.ts */
+#cursor { display: none; }
+.has-cursor, .has-cursor a, .has-cursor button, .has-cursor label { cursor: none; }
+.has-cursor input, .has-cursor textarea { cursor: text; }
+.has-cursor #cursor { display: grid; place-items: center; position: fixed; left: 0; top: 0; z-index: 200; pointer-events: none;
+  width: 18px; height: 18px; margin: -9px 0 0 -9px; border-radius: 50%; background: #fff; mix-blend-mode: difference;
+  transition: width .35s var(--ease), height .35s var(--ease), margin .35s var(--ease), opacity .2s; }
+#cursor span { font: 600 11px var(--mono); letter-spacing: .1em; color: #000; opacity: 0; transition: opacity .2s; }
+#cursor[data-mode="link"] { width: 50px; height: 50px; margin: -25px 0 0 -25px; }
+#cursor[data-mode="view"] { width: 92px; height: 92px; margin: -46px 0 0 -46px; }
+#cursor[data-mode="view"] span { opacity: 1; }
+#cursor[data-mode="hidden"] { opacity: 0; }
