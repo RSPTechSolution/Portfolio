@@ -1,0 +1,12 @@
+---
+import { profile } from '../../content/data/profile';
+---
+<footer class="foot mono">
+  <span>© 2026 {profile.name}</span>
+  <span>{profile.location}</span>
+  <span>Rising Star ’22 · Glowing Star ’23</span>
+</footer>
+
+<style>
+  .foot { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding: 24px 4vw; border-top: 2px solid var(--line); }
+</style>

@@ -1,0 +1,67 @@
+---
+import Led from '../ui/Led.astro';
+import { profile } from '../../content/data/profile';
+import { roles } from '../../content/data/roles';
+const action = `https://formspree.io/f/${import.meta.env.PUBLIC_FORMSPREE_ID ?? ''}`;
+---
+<section id="contact" class="section contact">
+  <div class="wrap">
+    <p class="mono" data-reveal><Led /> {profile.availability}</p>
+    <h2 class="big" data-reveal>Let's <em>talk.</em></h2>
+    <div class="grid">
+      <form action={action} method="POST" novalidate class="clay" data-contact>
+        <label>Name<input name="name" autocomplete="name" required /></label>
+        <span class="err" data-error-for="name" aria-live="polite"></span>
+        <label>Email<input name="email" type="email" autocomplete="email" required /></label>
+        <span class="err" data-error-for="email" aria-live="polite"></span>
+        <label>Message<textarea name="message" rows="5" required></textarea></label>
+        <span class="err" data-error-for="message" aria-live="polite"></span>
+        <fieldset>
+          <legend>I'm writing as</legend>
+          <label class="radio"><input type="radio" name="kind" value="recruiter" />I'm a recruiter</label>
+          <label class="radio"><input type="radio" name="kind" value="client" />I'm a client</label>
+        </fieldset>
+        <span class="err" data-error-for="kind" aria-live="polite"></span>
+        <button type="submit" class="send">Send message</button>
+        <p class="status" data-status aria-live="polite"></p>
+      </form>
+      <div class="direct">
+        <a class="mail" href={`mailto:${profile.email}`}>{profile.email} ↗</a>
+        <a href={profile.linkedin} rel="noopener">LinkedIn ↗</a>
+        {profile.showPhone && <a href={`tel:${profile.phone.replace(/\s/g, '')}`}>{profile.phone}</a>}
+        <p class="mono">Résumés</p>
+        <ul>{roles[0].resumes.map((r) => <li><a href={r.href} download>↓ {r.label}</a></li>)}</ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact { padding-bottom: 100px; }
+  .big { font: 800 clamp(70px, 13vw, 210px)/.85 var(--disp); font-stretch: 75%; letter-spacing: -.04em; margin-top: 14px; }
+  .grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 40px; margin-top: 50px; align-items: start; }
+  form { padding: 32px; display: grid; gap: 6px; }
+  label { display: grid; gap: 6px; font-weight: 600; margin-top: 10px; }
+  input:not([type="radio"]), textarea { font: 400 16px var(--disp); color: var(--text); padding: 14px 16px; border: 0; border-radius: 16px; background: var(--bg); box-shadow: var(--in); }
+  textarea { resize: vertical; }
+  fieldset { border: 0; margin-top: 14px; display: flex; flex-wrap: wrap; gap: 18px; align-items: center; }
+  legend { font-weight: 600; margin-bottom: 6px; }
+  .radio { display: flex; gap: 8px; align-items: center; margin: 0; font-weight: 500; }
+  .radio input { accent-color: var(--accent); width: 18px; height: 18px; }
+  .err { font-size: 13px; color: var(--accent); min-height: 1em; }
+  .send { margin-top: 16px; justify-self: start; border: 0; cursor: pointer; font: 700 17px var(--disp); padding: 16px 26px; border-radius: 999px; background: var(--accent); color: var(--on-accent); box-shadow: var(--out); transition: transform .15s; }
+  .send:active { transform: scale(.97); }
+  .send:disabled { opacity: .6; cursor: progress; }
+  .status { min-height: 1.4em; font-weight: 600; }
+  .direct { display: grid; gap: 14px; font-size: 18px; }
+  .direct a { font-weight: 700; }
+  .mail { font: 800 clamp(20px, 2.2vw, 28px) var(--disp); text-decoration-color: var(--accent); }
+  .direct ul { list-style: none; display: grid; gap: 8px; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+</style>
+
+<script>
+  import { submitContact } from '../../scripts/contact';
+  const form = document.querySelector<HTMLFormElement>('[data-contact]')!;
+  form.addEventListener('submit', (e) => { e.preventDefault(); void submitContact(form); });
+</script>

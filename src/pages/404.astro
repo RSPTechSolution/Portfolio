@@ -1,0 +1,24 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Signal lost — Subodh Kant" description="This page doesn't exist.">
+  <main class="lost">
+    <div class="screen">
+      <p class="hud">● CH-404 · NO CARRIER</p>
+      <h1>SIGNAL LOST</h1>
+      <p>This page doesn't exist, or it moved.</p>
+      <a href="/">← Back home</a>
+    </div>
+  </main>
+</Base>
+
+<style>
+  .lost { min-height: 100svh; display: grid; place-items: center; padding: 6vw; }
+  .screen { position: relative; width: min(720px, 100%); padding: 60px 40px; border-radius: 28px; text-align: center; overflow: hidden;
+    background: radial-gradient(ellipse, #2a1a05, #0c0a07 70%); color: var(--amber); font-family: var(--mono);
+    text-shadow: 0 0 10px rgba(255,181,71,.6); box-shadow: var(--out), inset 0 0 60px rgba(0,0,0,.8); }
+  .screen::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(0deg, rgba(0,0,0,.25) 0 2px, transparent 2px 4px); }
+  .hud { font-size: 11px; letter-spacing: .2em; }
+  h1 { font: 800 clamp(48px, 9vw, 110px)/.9 var(--disp); font-stretch: 75%; margin: 18px 0; }
+  a { display: inline-block; margin-top: 24px; color: var(--amber); font-weight: 600; }
+</style>
