@@ -16,3 +16,6 @@ em { font-family: var(--serif); font-style: italic; font-weight: 400; color: var
     transition-duration: .01ms !important; scroll-behavior: auto !important;
   }
 }
+
+/* Day/night circular reveal: the new snapshot is clipped by theme.ts */
+::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }

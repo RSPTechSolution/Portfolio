@@ -25,6 +25,7 @@ const { title, description } = Astro.props;
       (function () {
         var d = document.documentElement, keys = ['all', 'drupal', 'php', 'backend', 'ai'];
         d.classList.add('js');
+        try { if (localStorage.getItem('sk-theme') === 'night') d.dataset.theme = 'night'; } catch (e) {}
         try { var r = (new URLSearchParams(location.search).get('role') || '').trim().toLowerCase(); if (keys.indexOf(r) > -1) d.dataset.role = r; } catch (e) {}
       })();
     </script>

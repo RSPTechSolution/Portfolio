@@ -1,12 +1,14 @@
 ---
 import Base from '../layouts/Base.astro';
 import RoleControl from '../components/ui/RoleControl.astro';
+import TopBar from '../components/TopBar.astro';
 import { skills } from '../content/data/skills';
 import { roles } from '../content/data/roles';
 const all = roles[0];
 ---
 <Base title="Subodh Kant — Backend & Drupal Engineer" description="Portfolio of Subodh Kant, Backend & Drupal Engineer in Ludhiana, India.">
-  <main>
+  <TopBar slot="topbar" />
+  <main id="top" style="padding-top:100px">
     <h1>Subodh Kant</h1>
     <!-- Temporary role hooks (Task 3); replaced by real sections in Task 7. -->
     <p data-role-title>{all.title}</p>

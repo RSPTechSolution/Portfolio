@@ -1,0 +1,34 @@
+<div class="power">
+  <span class="mono" data-power-label>Day shift</span>
+  <button type="button" id="power" class="rocker" data-power aria-pressed="false" aria-label="Switch to night shift">
+    <span class="thumb" aria-hidden="true"></span>
+  </button>
+</div>
+
+<style>
+  .power { display: flex; align-items: center; gap: 12px; }
+  .rocker { position: relative; width: 96px; height: 48px; border-radius: 999px; border: 0; cursor: pointer; background: var(--surface); box-shadow: var(--in); flex: none; }
+  .thumb { position: absolute; top: 6px; left: 6px; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; font-size: 16px;
+    background: radial-gradient(circle at 35% 30%, #ffd27a, #f6b21e 60%, #c88a08);
+    box-shadow: inset -4px -5px 8px rgba(120,70,0,.4), inset 3px 3px 6px rgba(255,255,255,.55), 4px 6px 12px rgba(0,0,0,.25);
+    transition: transform .6s cubic-bezier(.3,1.5,.4,1), background .4s; }
+  .thumb::after { content: "☀"; color: #3a2400; }
+  :global([data-theme="night"]) .thumb { transform: translateX(48px); background: radial-gradient(circle at 35% 30%, #5a554b, #2c2924);
+    box-shadow: 0 0 18px rgba(255,181,71,.45), inset 2px 2px 4px rgba(255,255,255,.12); }
+  :global([data-theme="night"]) .thumb::after { content: "☾"; color: var(--amber); }
+  @media (max-width: 560px) { .power .mono { display: none; } }
+</style>
+
+<script>
+  import { toggleTheme, currentTheme } from '../../scripts/theme';
+
+  const btn = document.getElementById('power')!;
+  const t = currentTheme();
+  btn.setAttribute('aria-pressed', String(t === 'night'));
+  btn.setAttribute('aria-label', t === 'night' ? 'Switch to day shift' : 'Switch to night shift');
+  document.querySelectorAll<HTMLElement>('[data-power-label]').forEach((el) => { el.textContent = t === 'night' ? 'Night shift' : 'Day shift'; });
+  btn.addEventListener('click', () => {
+    const r = btn.getBoundingClientRect();
+    void toggleTheme({ x: r.left + r.width / 2, y: r.top + r.height / 2 });
+  });
+</script>
