@@ -1,0 +1,52 @@
+---
+import Switch from '../ui/Switch.astro';
+import { services, howIWork } from '../../content/data/services';
+const badges = ['D', '{ }', '↗', '⚡'];
+---
+<section id="services" class="section tight">
+  <div class="wrap">
+    <p class="kicker mono" data-reveal>For clients · flip a switch</p>
+    <h2 class="h2" data-reveal>What I can <em>build</em> for you.</h2>
+    <div class="mods">
+      {services.map((s, i) => (
+        <article class="mod" data-module data-roles={s.roles.join(' ')} data-reveal>
+          <header>
+            <span class="badge" aria-hidden="true">{badges[i]}</span>
+            <div><h3>{s.title}</h3><p>{s.summary}</p></div>
+            <Switch label={`Show details: ${s.title}`} controls={`svc-${s.key}`} />
+          </header>
+          <div class="body" id={`svc-${s.key}`}><div><p>{s.details}</p></div></div>
+        </article>
+      ))}
+    </div>
+    <ol class="how" aria-label="How I work" data-reveal>
+      {howIWork.map((h, i) => <li><span class="mono">0{i + 1}</span>{h}</li>)}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .mods { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 56px; }
+  .mod { border-radius: 30px; background: var(--surface); box-shadow: var(--out); transition: opacity .4s, filter .4s; }
+  header { display: grid; grid-template-columns: auto 1fr auto; gap: 18px; align-items: center; padding: 26px 28px; }
+  h3 { font: 800 clamp(24px, 2.6vw, 32px)/1 var(--disp); font-stretch: 80%; letter-spacing: -.02em; }
+  header p { font-size: 15px; color: var(--muted); margin-top: 4px; }
+  .badge { width: 54px; height: 54px; border-radius: 18px; display: grid; place-items: center; font: 800 22px var(--disp); color: var(--ink); box-shadow: inset -4px -5px 8px rgba(0,0,0,.14), inset 4px 4px 6px rgba(255,255,255,.6); }
+  .mod:nth-child(1) .badge { background: var(--blush); } .mod:nth-child(2) .badge { background: var(--butter); }
+  .mod:nth-child(3) .badge { background: var(--sage); } .mod:nth-child(4) .badge { background: var(--accent); color: var(--on-accent); }
+  .body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .55s var(--ease); }
+  .body > div { overflow: hidden; }
+  .body p { padding: 0 28px 26px; font-size: 16px; }
+  .mod:global(.open) .body { grid-template-rows: 1fr; }
+  :global(html:not(.js)) .body { grid-template-rows: 1fr; }
+  .how { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 40px; border-radius: 24px; overflow: hidden; box-shadow: var(--out); }
+  .how li { padding: 22px; font: 800 24px var(--disp); font-stretch: 80%; background: var(--surface); }
+  .how li + li { border-left: 1px solid var(--line); }
+  .how .mono { display: block; color: var(--accent); margin-bottom: 6px; }
+  @media (max-width: 860px) { .mods { grid-template-columns: 1fr; } .how { grid-template-columns: 1fr 1fr; } }
+</style>
+
+<script>
+  import { initToggles } from '../../scripts/toggles';
+  initToggles(document.getElementById('services')!);
+</script>

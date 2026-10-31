@@ -1,0 +1,12 @@
+---
+interface Props { label: string; controls: string }
+const { label, controls } = Astro.props;
+---
+<button type="button" class="switch" aria-expanded="false" aria-controls={controls} aria-label={label}></button>
+
+<style>
+  .switch { width: 62px; height: 34px; flex: none; border-radius: 999px; border: 0; cursor: pointer; position: relative; background: var(--surface); box-shadow: var(--in); }
+  .switch::after { content: ""; position: absolute; top: 5px; left: 5px; width: 24px; height: 24px; border-radius: 50%; background: var(--muted);
+    box-shadow: 3px 3px 6px rgba(0,0,0,.3); transition: transform .45s cubic-bezier(.3,1.5,.4,1), background .3s; }
+  .switch[aria-expanded="true"]::after { transform: translateX(28px); background: var(--accent); }
+</style>

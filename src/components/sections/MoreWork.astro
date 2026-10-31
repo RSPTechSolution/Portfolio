@@ -1,0 +1,30 @@
+---
+import { moreWork } from '../../content/data/more-work';
+---
+<section id="more-work" class="section tight">
+  <div class="wrap">
+    <p class="kicker mono" data-reveal>More work</p>
+    <ul class="rows">
+      {moreWork.map((w, i) => (
+        <li class="row" data-roles={w.roles.join(' ')} tabindex="0">
+          <span class="mono">0{i + 1}</span>
+          <h3>{w.title}</h3>
+          <p>{w.summary}</p>
+          <span class="tag mono">{w.tag}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .rows { list-style: none; border-top: 2px solid var(--line); }
+  .row { position: relative; isolation: isolate; display: grid; grid-template-columns: 60px 1.2fr 1fr 120px; gap: 24px; align-items: center; padding: 30px 10px; border-bottom: 2px solid var(--line); transition: color .3s, opacity .4s, filter .4s; }
+  .row::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--accent); transform: scaleY(0); transform-origin: bottom; transition: transform .5s var(--ease); }
+  .row:hover::before, .row:focus-visible::before { transform: scaleY(1); }
+  .row:hover, .row:focus-visible { color: var(--on-accent); }
+  .row:hover .mono, .row:focus-visible .mono { color: inherit; }
+  h3 { font: 800 clamp(26px, 3.2vw, 46px)/.95 var(--disp); font-stretch: 75%; letter-spacing: -.03em; }
+  .tag { text-align: right; }
+  @media (max-width: 860px) { .row { grid-template-columns: 40px 1fr; } .row p, .tag { display: none; } }
+</style>

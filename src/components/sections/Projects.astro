@@ -1,0 +1,59 @@
+---
+import { getCollection } from 'astro:content';
+const all = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+const projects = import.meta.env.PROD ? all.filter((p) => !p.data.draft) : all;
+const filters = [
+  { key: 'all', label: 'All' }, { key: 'drupal', label: 'Drupal' }, { key: 'backend', label: 'Backend' },
+  { key: 'ai', label: 'AI' }, { key: 'vibe-coded', label: 'Vibe-coded' },
+];
+---
+<section id="projects" class="section tight">
+  <div class="wrap">
+    <p class="kicker mono" data-reveal>Projects</p>
+    <h2 class="h2" data-reveal>Side <em>projects</em>.</h2>
+    <div class="chips" role="group" aria-label="Filter projects" data-reveal>
+      {filters.map((f) => <button type="button" data-filter={f.key} aria-pressed={f.key === 'all' ? 'true' : 'false'}>{f.label}</button>)}
+    </div>
+    <div class="grid">
+      {projects.map((p) => (
+        <article class="card" data-tags={p.data.tags.join(' ')} data-roles={p.data.roles.join(' ')} data-view={p.data.links.live || p.data.links.github ? '' : undefined}>
+          <div class="top">
+            {p.data.vibeCoded && <span class="badge mono">Built with AI</span>}
+            {p.data.draft && <span class="badge draft mono">Draft · dev only</span>}
+          </div>
+          <h3>{p.data.title}</h3>
+          <p>{p.data.summary}</p>
+          <ul class="tags">{p.data.tags.map((t) => <li class="mono">{t}</li>)}</ul>
+          {(p.data.links.live || p.data.links.github) && (
+            <div class="links">
+              {p.data.links.live && <a href={p.data.links.live} rel="noopener">Live ↗</a>}
+              {p.data.links.github && <a href={p.data.links.github} rel="noopener">GitHub ↗</a>}
+            </div>
+          )}
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 36px; }
+  .chips button { border: 0; cursor: pointer; font: 700 14px var(--disp); padding: 10px 16px; border-radius: 999px; background: var(--surface); box-shadow: var(--out); }
+  .chips button[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 22px; margin-top: 32px; }
+  .card { padding: 28px; border-radius: 30px; background: var(--surface); box-shadow: var(--out); display: flex; flex-direction: column; gap: 12px; transition: transform .3s var(--ease), opacity .4s, filter .4s; }
+  .card[hidden] { display: none; }
+  .card:hover { transform: translateY(-6px) rotate(-.6deg); }
+  .top { display: flex; gap: 8px; min-height: 22px; }
+  .badge { padding: 3px 8px; border-radius: 6px; background: var(--accent); color: var(--on-accent); }
+  .badge.draft { background: transparent; color: var(--muted); border: 1px dashed var(--muted); }
+  h3 { font: 800 28px/1 var(--disp); font-stretch: 80%; }
+  .tags { list-style: none; display: flex; gap: 6px; flex-wrap: wrap; margin-top: auto; }
+  .tags li { padding: 4px 8px; border-radius: 8px; box-shadow: var(--in); }
+  .links { display: flex; gap: 16px; font-weight: 700; }
+</style>
+
+<script>
+  import { initProjectFilter } from '../../scripts/projects';
+  initProjectFilter(document.getElementById('projects')!);
+</script>

@@ -1,0 +1,24 @@
+---
+import { learning } from '../../content/data/learning';
+---
+<section id="learning" class="section tight">
+  <div class="wrap">
+    <p class="kicker mono" data-reveal>Currently learning</p>
+    <div class="lcd" data-reveal>
+      <p class="hdr">NOW PLAYING · {learning.length} TRACKS</p>
+      <ol>{learning.map((l, i) => <li><span>{String(i + 1).padStart(2, '0')}</span>{l}</li>)}</ol>
+      <p class="cur" aria-hidden="true">&gt; <i></i></p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .lcd { border-radius: 24px; padding: 26px 28px; background: var(--screen); color: var(--amber); font: 400 15px/1.9 var(--mono);
+    text-shadow: 0 0 8px rgba(255,181,71,.5); box-shadow: var(--in), inset 0 0 0 3px #0a0907; max-width: 760px; }
+  .hdr { font-size: 10px; letter-spacing: .2em; color: #a3772f; margin-bottom: 10px; }
+  ol { list-style: none; }
+  li span { color: #a3772f; margin-right: 14px; }
+  .cur i { display: inline-block; width: 9px; height: 16px; background: var(--amber); vertical-align: -2px; animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .cur i { animation: none; } }
+</style>

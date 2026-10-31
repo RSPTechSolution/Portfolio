@@ -1,0 +1,43 @@
+---
+import { awards } from '../../content/data/awards';
+---
+<section id="awards" class="section tight">
+  <div class="wrap">
+    <p class="kicker mono" data-reveal>Awards & certifications</p>
+    <ul class="badges">
+      {awards.map((a) => (
+        <li class={`b ${a.kind}`} data-reveal data-tilt>
+          <span class="medal" aria-hidden="true">{a.kind === 'award' ? '★' : '✓'}</span>
+          <h3>{a.name}</h3>
+          <p class="mono">{a.issuer}{a.year ? ` · ${a.year}` : ''}</p>
+          <p class="note">{a.note}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .badges { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; perspective: 900px; }
+  .b { padding: 28px 24px; border-radius: 30px; background: var(--surface); box-shadow: var(--out); text-align: center; display: grid; justify-items: center; gap: 8px; transition: transform .2s ease-out; }
+  .medal { width: 78px; height: 78px; border-radius: 50%; display: grid; place-items: center; font-size: 34px; color: var(--ink);
+    background: radial-gradient(circle at 35% 30%, #ffe19a, var(--butter) 55%, #c89410);
+    box-shadow: inset -6px -8px 14px rgba(150,100,0,.35), inset 6px 6px 12px rgba(255,255,255,.6), 8px 12px 20px rgba(0,0,0,.2); }
+  .cert .medal { background: radial-gradient(circle at 35% 30%, #d6efc9, var(--sage) 55%, #6f9563); }
+  h3 { font: 800 24px/1.05 var(--disp); font-stretch: 80%; }
+  .note { font-size: 14px; color: var(--muted); }
+  @media (max-width: 960px) { .badges { grid-template-columns: 1fr 1fr; } }
+</style>
+
+<script>
+  if (matchMedia('(hover: hover) and (pointer: fine)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll<HTMLElement>('[data-tilt]').forEach((el) => {
+      el.addEventListener('pointermove', (e) => {
+        const r = el.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
+        el.style.transform = `rotateY(${x * 10}deg) rotateX(${-y * 10}deg)`;
+      });
+      el.addEventListener('pointerleave', () => { el.style.transform = ''; });
+    });
+  }
+</script>
