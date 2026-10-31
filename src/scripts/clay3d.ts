@@ -5,19 +5,14 @@ import { hasWebGL } from './portrait3d';
 import { watchVisibility } from './visibility';
 import type { Theme } from './theme';
 
-export type ClayKind = 'torus' | 'sphere' | 'blob' | 'knob' | 'key' | 'led';
-export type ClayItem = [kind: ClayKind, paletteIndex: number, x: number, y: number, z: number, scale?: number];
+import type { ClayItem, ClayKind } from './clay-layouts';
+export { HERO_LAYOUT, MOBILE_LAYOUT } from './clay-layouts';
 
 const PALETTE: Record<Theme, string[]> = {
   day: ['#ff4a1c', '#f6c445', '#a8c69f', '#f4b6a6', '#151411'],
   night: ['#ffb547', '#ff5a36', '#3a362f', '#2a2722', '#ede4d4'],
 };
 const ACCENT = '#ffb547';
-
-export const HERO_LAYOUT: ClayItem[] = [
-  ['torus', 0, -5.4, 2.8, -2, 0.9], ['knob', 4, 5.4, 3, -2], ['sphere', 1, 0.8, -3.7, -2, 0.8],
-  ['key', 2, -5.2, -2.6, -1], ['blob', 3, 6, -2.4, -1, 0.75], ['led', 0, -1.4, 3.9, -3],
-];
 
 function build(kind: ClayKind, mat: THREE.Material, accent: THREE.Material): THREE.Object3D {
   switch (kind) {

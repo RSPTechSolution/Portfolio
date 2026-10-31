@@ -26,9 +26,9 @@ const badges = ['D', '{ }', '↗', '⚡'];
 </section>
 
 <style>
-  .mods { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 56px; }
+  .mods { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; margin-top: 56px; }
   .mod { border-radius: 30px; background: var(--surface); box-shadow: var(--out); transition: opacity .4s, filter .4s; }
-  header { display: grid; grid-template-columns: auto 1fr auto; gap: 18px; align-items: center; padding: 26px 28px; }
+  header { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 18px; align-items: center; padding: 26px 28px; }
   h3 { font: 800 clamp(24px, 2.6vw, 32px)/1 var(--disp); font-stretch: 80%; letter-spacing: -.02em; }
   header p { font-size: 15px; color: var(--muted); margin-top: 4px; }
   .badge { width: 54px; height: 54px; border-radius: 18px; display: grid; place-items: center; font: 800 22px var(--disp); color: var(--ink); box-shadow: inset -4px -5px 8px rgba(0,0,0,.14), inset 4px 4px 6px rgba(255,255,255,.6); }
@@ -43,7 +43,8 @@ const badges = ['D', '{ }', '↗', '⚡'];
   .how li { padding: 22px; font: 800 24px var(--disp); font-stretch: 80%; background: var(--surface); }
   .how li + li { border-left: 1px solid var(--line); }
   .how .mono { display: block; color: var(--accent-text); margin-bottom: 6px; }
-  @media (max-width: 860px) { .mods { grid-template-columns: 1fr; } .how { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 860px) { .mods { grid-template-columns: minmax(0, 1fr); } .how { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 420px) { header { gap: 12px; padding: 20px 18px; } .badge { width: 44px; height: 44px; font-size: 18px; } .body p { padding: 0 18px 20px; } }
 </style>
 
 <script>

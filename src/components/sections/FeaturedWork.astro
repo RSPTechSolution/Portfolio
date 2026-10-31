@@ -35,7 +35,7 @@ const studies = (await getCollection('caseStudies')).sort((a, b) => a.data.order
   .tags li { padding: 5px 10px; border-radius: 8px; box-shadow: var(--in); }
   .more { display: inline-block; margin-top: 18px; color: var(--accent-text); }
   .viz { grid-column: 1 / -1; padding: 24px; border-radius: 24px; box-shadow: var(--in); }
-  @media (max-width: 760px) { .study { grid-template-columns: 1fr; padding: 24px; } .num { font-size: 60px; } }
+  @media (max-width: 760px) { .study { grid-template-columns: 1fr; padding: 24px; } .num { font-size: 60px; } .viz { display: none; } }
 </style>
 
 <script>

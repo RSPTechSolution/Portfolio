@@ -3,7 +3,7 @@
 // against each other. There is no vertex displacement: the face is never deformed.
 // The static <img> stays underneath as LCP image and fallback; the opaque background plane covers it.
 import * as THREE from 'three';
-import { clampPose, curveFor } from './pose';
+import { clampPose, curveFor, touchPose } from './pose';
 import { watchVisibility } from './visibility';
 import type { Theme } from './theme';
 
@@ -142,6 +142,7 @@ export async function mountPortrait(
     renderer.setAnimationLoop(() => {
       if (!vis.v.active()) return;
       const t = clock.getElapsedTime();
+      if (!fine) Object.assign(target, touchPose(t, -rect.top / Math.max(rect.height, 1)));
       const k = Math.min((performance.now() - start) / 2200, 1);
       shared.uReveal.value = k < 1 ? (1 - Math.pow(1 - k, 3)) * 1.02 : 1.2;
       shared.uTime.value = t;
