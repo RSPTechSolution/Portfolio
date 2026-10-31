@@ -1,0 +1,21 @@
+---
+interface Props { name: string; use: string; verify: boolean }
+const { name, use, verify } = Astro.props;
+---
+<div class="keycap">
+  <span class="cap" aria-hidden="true">{name.slice(0, 2)}</span>
+  <div>
+    <h3>{name}{verify && <span class="verify mono" title="Not yet confirmed by Subodh">verify</span>}</h3>
+    <p>{use}</p>
+  </div>
+</div>
+
+<style>
+  .keycap { display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; padding: 18px; border-radius: 24px; background: var(--surface); box-shadow: var(--out); transition: transform .15s, box-shadow .15s; }
+  .keycap:hover { transform: translateY(3px); box-shadow: var(--in); }
+  .cap { width: 64px; height: 64px; border-radius: 18px; display: grid; place-items: center; font: 800 24px var(--disp); background: var(--accent); color: var(--on-accent);
+    box-shadow: inset -4px -5px 8px rgba(0,0,0,.22), inset 4px 4px 6px rgba(255,255,255,.35), 6px 8px 14px rgba(0,0,0,.18); }
+  h3 { font: 800 22px/1.1 var(--disp); font-stretch: 80%; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  p { font-size: 14.5px; color: var(--muted); margin-top: 4px; }
+  .verify { font-size: 9px; padding: 2px 6px; border-radius: 6px; border: 1px dashed var(--accent); color: var(--accent); }
+</style>

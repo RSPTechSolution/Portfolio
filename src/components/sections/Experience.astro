@@ -1,0 +1,32 @@
+---
+import { experience } from '../../content/data/experience';
+---
+<section id="experience" class="section tight">
+  <div class="wrap">
+    <p class="kicker mono" data-reveal>Experience</p>
+    <h2 class="h2" data-reveal>Where I've <em>shipped</em>.</h2>
+    <ol class="timeline">
+      {experience.map((e) => (
+        <li data-reveal>
+          <span class="when mono">{e.start} — {e.end ?? 'now'}</span>
+          <h3>{e.org}</h3>
+          {typeof e.title === 'string'
+            ? <p class="title">{e.title}</p>
+            : <p class="title" data-role-map={JSON.stringify(e.title)}>{e.title.all}</p>}
+          {e.points.length > 0 && <ul>{e.points.map((p) => <li>{p}</li>)}</ul>}
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .timeline { list-style: none; position: relative; margin-top: 56px; padding-left: 34px; display: grid; gap: 44px; }
+  .timeline::before { content: ""; position: absolute; left: 8px; top: 6px; bottom: 6px; width: 2px; background: var(--line); opacity: .4; }
+  .timeline > li { position: relative; }
+  .timeline > li::before { content: ""; position: absolute; left: -32px; top: 6px; width: 14px; height: 14px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 5px var(--bg), 0 0 14px var(--accent); }
+  .when { color: var(--accent); }
+  h3 { font: 800 clamp(28px, 3vw, 42px)/1 var(--disp); font-stretch: 75%; margin-top: 6px; }
+  .title { font: 500 20px var(--serif); font-style: italic; margin-top: 4px; }
+  ul { margin-top: 12px; padding-left: 18px; display: grid; gap: 6px; max-width: 70ch; color: var(--muted); }
+</style>

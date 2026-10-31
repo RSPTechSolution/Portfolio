@@ -1,0 +1,45 @@
+---
+interface Props { compact?: boolean }
+const { compact = false } = Astro.props;
+const nodes = [
+  { x: 40, label: 'ASSIGNED', sub: 'decision < 1ms' },
+  { x: 255, label: 'DELIVERED', sub: 'edge → client' },
+  { x: 470, label: 'RENDERED', sub: 'DOM painted' },
+  { x: 685, label: 'SEEN', sub: 'in viewport' },
+  { x: 900, label: 'CLICKED', sub: 'conversion' },
+];
+---
+<svg class:list={['pipeline', { compact }]} viewBox="0 0 1100 290" role="img" data-pipeline
+  aria-label="Ad lifecycle: Assigned, Delivered, Rendered, Seen, Clicked. Events flow through a Redis queue into PostgreSQL.">
+  <path class="wire draw" d="M120 80 H980" />
+  <path class="wire dash draw" d="M550 112 V200" />
+  <path class="wire draw" d="M630 226 H770" />
+  <path class="wire dash draw" d="M120 112 V226 H470" />
+  {nodes.map((n) => (
+    <g class="node">
+      <rect x={n.x} y="48" width="160" height="64" rx="12" />
+      <text x={n.x + 18} y="78">{n.label}</text>
+      <text class="sub" x={n.x + 18} y="96">{n.sub}</text>
+    </g>
+  ))}
+  <g class="store"><rect x="470" y="200" width="160" height="52" rx="12" /><text x="490" y="231">REDIS QUEUE</text></g>
+  <g class="store"><rect x="770" y="200" width="160" height="52" rx="12" /><text x="790" y="231">POSTGRESQL</text></g>
+  <circle class="packet" r="6" style="offset-path: path('M120 80 H980'); animation-delay: 0s" />
+  <circle class="packet" r="6" style="offset-path: path('M120 80 H980'); animation-delay: -1.6s" />
+  <circle class="packet small" r="4" style="offset-path: path('M550 112 V226 H850'); animation-delay: -.6s" />
+</svg>
+
+<style>
+  .pipeline { width: 100%; height: auto; overflow: visible; color: var(--text); }
+  .wire { fill: none; stroke: currentColor; stroke-width: 1.5; opacity: .7; }
+  .dash { stroke-dasharray: 4 5; }
+  .node rect { fill: var(--surface); stroke: currentColor; stroke-width: 1.5; }
+  .node text { font: 600 13px var(--mono); fill: currentColor; letter-spacing: .06em; }
+  .node .sub { font: 400 10px var(--mono); fill: var(--muted); }
+  .store rect { fill: var(--text); }
+  .store text { fill: var(--bg); font: 600 12px var(--mono); }
+  .packet { fill: var(--accent); animation: travel 3.2s linear infinite; }
+  .packet.small { animation-duration: 2.4s; }
+  @keyframes travel { from { offset-distance: 0%; } to { offset-distance: 100%; } }
+  @media (prefers-reduced-motion: reduce) { .packet { display: none; } }
+</style>
