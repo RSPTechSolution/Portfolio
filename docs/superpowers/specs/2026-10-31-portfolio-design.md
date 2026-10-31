@@ -33,7 +33,7 @@ All facts come from Subodh's three résumés (PHP Developer, Drupal Developer, F
   - HB Infotech Pvt Ltd, PHP Developer, Mar 2021 – Jul 2021.
 - **Education:** BCA, Gulzar Group of Institutions, Khanna (2018 – Jan 2021).
 - **Featured projects**
-  - PotatoPro Enterprise Platform (potatopro.com; Drupal 10, Search API, Solr/OpenSearch, Redis, AI integrations; won a special award).
+  - Enterprise B2B Directory Platform (Drupal 10, Search API, Solr/OpenSearch, Redis, AI integrations; won a special award).
   - Ads Delivery System (FastAPI, Redis, PostgreSQL, Docker, AWS; sub-millisecond decisions; lifecycle Assigned → Delivered → Rendered → Seen → Clicked).
 - **More work:** Drupal 7 → 9/10 migrations, headless Drupal APIs, payment/CRM/AI integrations, Drupal Commerce.
 - **Awards:** Rising Star 2022 and Glowing Star 2023 (LN Webworks). **Certifications:** Python Programming, AI Tools.
@@ -87,7 +87,7 @@ Two modes share one layout. Mode is `data-theme="day" | "night"` on `<html>`.
 
 ## 5. Page structure
 
-Single page `/` plus `/work/potatopro`, `/work/ads-delivery-system` and `/404`.
+Single page `/` plus `/work/enterprise-b2b-platform`, `/work/ads-delivery-system` and `/404`.
 
 | # | Section | Content | Motion |
 |---|---|---|---|
@@ -99,7 +99,7 @@ Single page `/` plus `/work/potatopro`, `/work/ads-delivery-system` and `/404`.
 | 5 | Stack | Grouped skill chips (Drupal, Languages, Backend, Data, DevOps, Tools) with level meters | FLIP reorder per role |
 | 6 | AI Toolkit & Vibe Coding | Tool keycaps (name, "what I use it for"); workflow Prompt → Generate → Review → Test → Ship; line "AI drafts, I engineer: every line is reviewed, tested and owned." | Keycaps press down; workflow strip draws on scroll |
 | 7 | Experience | LN Webworks, HB Infotech, BCA | Timeline line draws on scroll |
-| 8 | Featured work | PotatoPro and Ads Delivery case-study cards linking to detail pages | **Signature:** live pipeline schematic on the Ads card (SVG; packets via `offset-path`) |
+| 8 | Featured work | Enterprise B2B platform and Ads Delivery case-study cards linking to detail pages | **Signature:** live pipeline schematic on the Ads card (SVG; packets via `offset-path`) |
 | 9 | Projects | Filter chips (All · Drupal · Backend · AI · Vibe-coded); cards with tags, "built with AI" badge, Live/GitHub links | Card tilt; FLIP on filter |
 | 10 | More work | Hover-fill rows: migrations, headless APIs, integrations, Commerce | Fill wipe on hover/focus |
 | 11 | Services | Four modules (Drupal platforms, APIs & microservices, Upgrades & migrations, Performance rescue) with expand switches; "How I work" Discover → Build → Ship → Support | `grid-template-rows` expand |

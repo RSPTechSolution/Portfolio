@@ -91,7 +91,7 @@ test('home loads with no console errors', async ({ page }) => {
 - Create: `src/content/data/{profile,roles,skills,experience,services,awards,learning,ai-tools,more-work}.ts`
 - Create: `src/content.config.ts` (Astro 5 location; it replaces the spec's `content/config.ts`)
 - Create: `src/content/projects/{portfolio,draft-1,draft-2,draft-3}.md`
-- Create: `src/content/case-studies/{potatopro,ads-delivery-system}.md`
+- Create: `src/content/case-studies/{enterprise-b2b-platform,ads-delivery-system}.md`
 - Create: `scripts/check-content.ts`
 - Test: `tests/unit/content.test.ts`, `tests/unit/check-content.test.ts`
 
@@ -374,14 +374,14 @@ test('content visible without JS', async ({ browser }) => { const p = await (awa
   - The workflow strip text is exactly: `Prompt → Generate → Review → Test → Ship`.
   - The tagline is exactly: "AI drafts, I engineer: every line is reviewed, tested and owned."
 - Produces: `PipelineSchematic.astro` is an inline SVG with an accessible `role="img"` and `aria-label`. Its nodes are ASSIGNED, DELIVERED, RENDERED, SEEN, CLICKED, REDIS QUEUE and POSTGRESQL (from sample A), and its strokes use `currentColor` and `--accent`. `initPipeline(svg: SVGSVGElement): void` draws wires on scroll and runs packets via CSS `offset-path`, hidden under reduced motion.
-- Produces: `/work/potatopro` and `/work/ads-delivery-system` from the collection via `getStaticPaths`. Each page has Problem / My role / Architecture / Stack / Outcome sections and next/prev links. Ads Delivery embeds `PipelineSchematic`.
+- Produces: `/work/enterprise-b2b-platform` and `/work/ads-delivery-system` from the collection via `getStaticPaths`. Each page has Problem / My role / Architecture / Stack / Outcome sections and next/prev links. Ads Delivery embeds `PipelineSchematic`.
 - **Experience:** the LN Webworks title uses `<span data-role-title>`. HB Infotech and BCA come from the data.
 
 - [ ] **Step 1: Write the failing tests**
 
 ```ts
 test('case study pages render', async ({ page }) => {
-  for (const s of ['potatopro', 'ads-delivery-system']) { await page.goto(`/work/${s}`); for (const h of ['Problem','My role','Architecture','Stack','Outcome']) await expect(page.getByRole('heading', { name: h })).toBeVisible(); }
+  for (const s of ['enterprise-b2b-platform', 'ads-delivery-system']) { await page.goto(`/work/${s}`); for (const h of ['Problem','My role','Architecture','Stack','Outcome']) await expect(page.getByRole('heading', { name: h })).toBeVisible(); }
 });
 test('pipeline is labelled', async ({ page }) => { await page.goto('/'); await expect(page.getByRole('img', { name: /Assigned.*Clicked/ })).toBeVisible(); });
 test('workflow strip copy', async ({ page }) => { await page.goto('/'); await expect(page.getByText('Prompt → Generate → Review → Test → Ship')).toBeVisible(); });
